@@ -7,9 +7,8 @@ const inputCls =
   "w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-slate-500 outline-none transition focus:border-purple-500/70 focus:shadow-[0_0_18px_rgba(168,85,247,0.25)]";
 
 const channels = [
-  { icon: "💬", label: "WhatsApp", value: "+91 98765 43210", href: "https://wa.me/919876543210" },
-  { icon: "📞", label: "Call Us", value: "+91 98765 43210", href: "tel:+919876543210" },
-  { icon: "📧", label: "Email", value: "hello@projectas01.com", href: "mailto:hello@projectas01.com" },
+  { icon: "💬", label: "WhatsApp", value: "+91 96706 21213", href: "https://wa.me/919670621213" },
+  { icon: "📞", label: "Call Us", value: "+91 96783 49001", href: "tel:+919678349001" },
 ];
 
 export default function Contact() {
@@ -80,16 +79,18 @@ export default function Contact() {
               </a>
             ))}
 
-            {/* stylized map */}
-            <div className="glass relative h-44 overflow-hidden rounded-2xl">
-              <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(139,92,246,0.25)_1px,transparent_1px),linear-gradient(90deg,rgba(139,92,246,0.25)_1px,transparent_1px)] [background-size:28px_28px]" />
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                <span className="relative flex h-5 w-5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-purple-500 opacity-60" />
-                  <span className="relative inline-flex h-5 w-5 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 shadow-[0_0_20px_rgba(147,51,234,0.9)]" />
-                </span>
-              </div>
-              <p className="absolute bottom-3 left-4 text-xs text-slate-400">📍 Guwahati, Assam · Working worldwide 🌍</p>
+            {/* real map */}
+            <div className="glass relative overflow-hidden rounded-2xl">
+              <iframe
+                src="https://maps.google.com/maps?q=Guwahati,+Assam,+India&z=12&output=embed"
+                title="Project AS01 location — Guwahati, Assam"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="h-56 w-full border-0 opacity-90 contrast-[1.05] saturate-[0.85]"
+              />
+              <p className="pointer-events-none absolute bottom-2 left-3 rounded-full bg-black/70 px-3 py-1 text-xs text-slate-200 backdrop-blur">
+                📍 Guwahati, Assam · Working worldwide 🌍
+              </p>
             </div>
           </motion.div>
 

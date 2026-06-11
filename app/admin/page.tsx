@@ -17,6 +17,7 @@ type Lead = {
   budget?: string;
   intent?: string;
   source?: string;
+  message?: string;
 };
 
 const callLogs = [
@@ -192,6 +193,7 @@ export default function AdminPage() {
                     <th className="px-5 py-4">Contact</th>
                     <th className="px-5 py-4">Project</th>
                     <th className="px-5 py-4">Budget</th>
+                    <th className="px-5 py-4">Message</th>
                     <th className="px-5 py-4">Intent</th>
                     <th className="px-5 py-4">Status</th>
                   </tr>
@@ -209,6 +211,11 @@ export default function AdminPage() {
                       </td>
                       <td className="px-5 py-4 text-slate-300">{l.projectType || "—"}</td>
                       <td className="px-5 py-4 text-slate-300">{l.budget || "—"}</td>
+                      <td className="max-w-[240px] px-5 py-4 text-slate-300">
+                        <span className="line-clamp-2 text-xs leading-relaxed" title={l.message}>
+                          {l.message || "—"}
+                        </span>
+                      </td>
                       <td className="px-5 py-4">
                         <span className="rounded-full bg-blue-500/15 px-2.5 py-1 text-[11px] text-blue-300">
                           {l.intent || "General"}

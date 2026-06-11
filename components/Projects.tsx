@@ -88,7 +88,7 @@ function ProjectModal({ p, onClose }: { p: Project; onClose: () => void }) {
         exit={{ scale: 0.92, y: 30, opacity: 0 }}
         transition={{ type: "spring", damping: 26, stiffness: 260 }}
       >
-        <div className="flex items-start justify-between gap-4 border-b border-white/10 p-5 sm:p-6">
+        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-white/10 p-5 sm:p-6">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-purple-400">{p.category}</p>
             <h3 className="font-display mt-1 text-2xl font-bold text-white">{p.title}</h3>
@@ -103,7 +103,7 @@ function ProjectModal({ p, onClose }: { p: Project; onClose: () => void }) {
           </button>
         </div>
 
-        <div className="flex gap-2 overflow-x-auto border-b border-white/10 px-5 pt-3 sm:px-6">
+        <div className="flex shrink-0 gap-2 overflow-x-auto border-b border-white/10 px-5 pt-3 sm:px-6">
           {tabs.map(([id, label]) => (
             <button
               key={id}
@@ -169,7 +169,7 @@ function ProjectModal({ p, onClose }: { p: Project; onClose: () => void }) {
           </AnimatePresence>
         </div>
 
-        <div className="flex flex-wrap gap-3 border-t border-white/10 p-5 sm:p-6">
+        <div className="flex shrink-0 flex-wrap gap-3 border-t border-white/10 p-5 sm:p-6">
           <a
             href={p.demoUrl}
             target="_blank"
