@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZoomRide — Bike Taxi & Delivery App</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Manrope,sans-serif;background:#fffef5;color:#191919}
+nav{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:15px 6%;background:#fffef5;border-bottom:1px solid #f0eddc}
+.logo{font-weight:800;font-size:23px}.logo span{background:#ffd60a;border-radius:6px;padding:1px 7px}
+nav ul{display:flex;gap:26px;list-style:none}nav a{color:#52524a;text-decoration:none;font-size:14px;font-weight:600}
+.btn{background:#191919;color:#ffd60a;border:none;padding:12px 24px;border-radius:10px;font-weight:800;font-size:14px;cursor:pointer}
+.btn.yel{background:#ffd60a;color:#191919}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:54px 6%;background:linear-gradient(180deg,#fffef5,#fff8d6)}
+.hero h1{font-size:50px;font-weight:800;line-height:1.07}
+.hero h1 mark{background:#ffd60a;border-radius:8px;padding:0 8px}
+.hero p{color:#6b6b5f;margin:18px 0 26px;font-size:16.5px}
+.stores{display:flex;gap:12px;margin-top:24px}
+.store{background:#191919;color:#fff;border-radius:10px;padding:9px 18px;font-size:12px;display:flex;align-items:center;gap:8px}
+.store b{display:block;font-size:13px}
+.store small{font-size:9px;opacity:.7}
+/* phone mock */
+.phone{width:290px;margin:0 auto;background:#191919;border-radius:38px;padding:11px;box-shadow:0 30px 70px rgba(25,25,25,.3)}
+.scr{background:#f3f1e6;border-radius:28px;overflow:hidden}
+.map{position:relative;height:240px;background:linear-gradient(#e8efde,#dde8d0)}
+.map::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(150,170,140,.25) 1px,transparent 1px),linear-gradient(90deg,rgba(150,170,140,.25) 1px,transparent 1px);background-size:34px 34px}
+.route{position:absolute;left:40px;top:36px;width:190px;height:160px;border:3px dashed #191919;border-radius:60% 30% 50% 40%;border-color:transparent transparent #191919 #191919;transform:rotate(-12deg)}
+.pin{position:absolute;font-size:22px}
+.pin.a{left:34px;top:170px}.pin.b{right:42px;top:26px}
+.rider{position:absolute;left:110px;top:108px;width:38px;height:38px;background:#ffd60a;border-radius:99px;display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 4px 14px rgba(0,0,0,.3);animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.sheet{background:#fff;padding:16px;border-radius:22px 22px 0 0;margin-top:-18px;position:relative}
+.sheet h4{font-size:14px;margin-bottom:10px}
+.opt{display:flex;justify-content:space-between;align-items:center;border:1.5px solid #eee;border-radius:12px;padding:10px 12px;margin-bottom:8px;font-size:13px}
+.opt.on{border-color:#191919;background:#fffbe6}
+.opt b{font-size:14px}
+.opt small{color:#8a8a7d;display:block;font-size:11px}
+.go{width:100%;background:#ffd60a;border:none;border-radius:12px;padding:13px;font-weight:800;font-size:14px;cursor:pointer;font-family:Manrope}
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;padding:60px 6%}
+.feat{background:#fff;border:1.5px solid #f0eddc;border-radius:18px;padding:26px;transition:transform .25s,box-shadow .25s}
+.feat:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(25,25,25,.08)}
+.feat .ic{width:46px;height:46px;background:#fff3b0;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px}
+.feat h3{font-size:17px;font-weight:800}.feat p{color:#6b6b5f;font-size:13.5px;margin-top:7px;line-height:1.6}
+.strip{background:#191919;color:#fff;display:flex;justify-content:center;gap:70px;padding:46px 6%;flex-wrap:wrap;text-align:center}
+.strip b{display:block;font-size:30px;font-weight:800;color:#ffd60a}
+.strip small{color:#9a9a8e;font-size:12px}
+.cta{text-align:center;padding:66px 6%;background:#fff8d6}
+.cta h2{font-size:36px;font-weight:800;margin-bottom:12px}
+.cta p{color:#6b6b5f;margin-bottom:26px}
+footer{background:#121212;color:#8a8a7d;text-align:center;padding:26px;font-size:13px}
+.as01{position:fixed;bottom:14px;left:14px;z-index:99;background:#0a0420;color:#c4b5fd;font-size:11px;font-weight:600;padding:8px 14px;border-radius:99px;text-decoration:none;border:1px solid #7c3aed;box-shadow:0 0 14px rgba(124,58,237,.5)}
+@media(max-width:820px){.hero{grid-template-columns:1fr}.hero h1{font-size:32px}nav ul{display:none}.strip{gap:30px}}
+</style>
+</head>
+<body>
+<nav><div class="logo">Zoom<span>Ride</span></div><ul><li><a href="#s2">Features</a></li><li><a href="#">Fares</a></li><li><a href="#">Captains</a></li><li><a href="#">Safety</a></li></ul><button class="btn yel">Become a Captain</button></nav>
+<header class="hero">
+<div><h1>Beat the Traffic. <mark>Ride in Minutes.</mark></h1>
+<p>Guwahati's fastest bike taxi — tap, match with a captain nearby, and zoom through traffic at half the price of a cab. Parcels delivered too.</p>
+<button class="btn">Book Your First Ride — ₹10</button>
+<div class="stores"><div class="store">▶ <span><small>GET IT ON</small><b>Google Play</b></span></div><div class="store"> <span><small>DOWNLOAD ON</small><b>App Store</b></span></div></div>
+</div>
+<div class="phone"><div class="scr">
+<div class="map"><div class="route"></div><span class="pin a">📍</span><span class="pin b">🏁</span><div class="rider">🏍️</div></div>
+<div class="sheet">
+<h4>Choose your ride</h4>
+<div class="opt on"><div><b>🏍️ Bike</b><small>2 min away · fastest</small></div><b>₹38</b></div>
+<div class="opt"><div><b>🛺 Auto</b><small>4 min away</small></div><b>₹72</b></div>
+<div class="opt"><div><b>📦 Parcel</b><small>Send anything, 5kg max</small></div><b>₹45</b></div>
+<button class="go">Confirm ZoomRide →</button>
+</div>
+</div></div>
+</header>
+<div class="strip"><div><b>10L+</b><small>Rides completed</small></div><div><b>8,500</b><small>Captains earning</small></div><div><b>3 min</b><small>Avg. pickup time</small></div><div><b>4.8★</b><small>App rating</small></div></div>
+<section class="feats" id="s2">
+<div class="feat"><div class="ic">⚡</div><h3>3-Minute Pickups</h3><p>Smart matching connects you to the nearest captain — live tracking from tap to drop.</p></div>
+<div class="feat"><div class="ic">🛡️</div><h3>Safety First</h3><p>Verified captains, helmet mandatory, SOS button and live trip sharing with family.</p></div>
+<div class="feat"><div class="ic">💸</div><h3>Honest Fares</h3><p>Fare shown before you book. No surge games. Pay by UPI, cash or wallet.</p></div>
+<div class="feat"><div class="ic">📦</div><h3>Instant Parcels</h3><p>Documents, tiffins, forgotten keys — delivered across the city in under an hour.</p></div>
+</section>
+<section class="cta"><h2>Earn ₹25,000+/month as a Captain 🏍️</h2><p>Ride on your schedule. Weekly payouts. Free insurance. Join 8,500 captains in Guwahati.</p><button class="btn">Apply in 2 Minutes →</button></section>
+<footer>© 2026 ZoomRide Mobility Pvt Ltd · Guwahati, Assam · Ride Safe, Ride Smart</footer>
+<a class="as01" href="/">⚡ Built by Project AS01</a>
+</body></html>

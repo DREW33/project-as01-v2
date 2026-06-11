@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spice Route — Fine Dining Restaurant in Guwahati</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Nunito Sans',sans-serif;background:#181210;color:#f2e9df}
+h1,h2,h3{font-family:'DM Serif Display',serif;font-weight:400}
+nav{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:16px 6%;background:rgba(24,18,16,.93);backdrop-filter:blur(10px);border-bottom:1px solid #2e2420}
+.logo{font-family:'DM Serif Display',serif;font-size:24px}.logo span{color:#e8a14e}
+nav ul{display:flex;gap:26px;list-style:none}nav a{color:#cdbfae;text-decoration:none;font-size:14px}
+.btn{background:#e8a14e;color:#241a12;border:none;padding:12px 26px;border-radius:99px;font-weight:700;font-size:14px;cursor:pointer}
+.btn.ol{background:transparent;color:#e8a14e;border:1.5px solid #e8a14e}
+.hero{position:relative;min-height:80vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 6%;background:linear-gradient(rgba(24,18,16,.62),rgba(24,18,16,.85)),url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1400&q=60') center/cover}
+.kick{letter-spacing:5px;font-size:12px;text-transform:uppercase;color:#e8a14e;margin-bottom:16px}
+.hero h1{font-size:58px;line-height:1.1;max-width:760px;margin:0 auto}
+.hero p{color:#d8c9b8;margin:18px auto 30px;max-width:520px;font-weight:300;font-size:16px}
+.times{display:flex;justify-content:center;gap:40px;padding:22px;background:#241a12;border-bottom:1px solid #2e2420;font-size:13px;color:#cdbfae;flex-wrap:wrap}
+.times b{color:#e8a14e}
+section{padding:70px 6%}
+.sec-h{text-align:center;margin-bottom:44px}.sec-h h2{font-size:40px}.sec-h p{color:#a8977f;margin-top:10px;font-weight:300}
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+.dish{background:#241a12;border:1px solid #2e2420;border-radius:16px;overflow:hidden;transition:transform .3s,border-color .3s}
+.dish:hover{transform:translateY(-6px);border-color:#e8a14e}
+.dish img{width:100%;height:190px;object-fit:cover;display:block}
+.dish .in{padding:16px}
+.dish .r{display:flex;justify-content:space-between;align-items:baseline}
+.dish h3{font-size:20px}
+.dish .pr{color:#e8a14e;font-weight:700;font-size:17px}
+.dish p{color:#a8977f;font-size:13.5px;margin-top:7px;font-weight:300;line-height:1.6}
+.tag{display:inline-block;margin-top:10px;font-size:10.5px;font-weight:700;letter-spacing:1px;background:#332417;color:#e8a14e;padding:4px 11px;border-radius:99px}
+.book{background:linear-gradient(rgba(24,18,16,.85),rgba(24,18,16,.85)),url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1400&q=60') center/cover;text-align:center}
+.book h2{font-size:40px;margin-bottom:12px}
+.book p{color:#d8c9b8;margin-bottom:28px;font-weight:300}
+.form{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.form input,.form select{background:#241a12;border:1px solid #4a3a2c;color:#f2e9df;padding:13px 16px;border-radius:99px;font-size:14px;outline:none;min-width:150px}
+.strip{display:flex;justify-content:center;gap:70px;padding:44px 6%;background:#241a12;flex-wrap:wrap;text-align:center}
+.strip b{display:block;font-size:30px;font-family:'DM Serif Display',serif;color:#e8a14e}
+.strip small{color:#a8977f;font-size:12px;letter-spacing:1px;text-transform:uppercase}
+footer{background:#120d0b;color:#8d7d68;text-align:center;padding:28px;font-size:13px}
+.as01{position:fixed;bottom:14px;left:14px;z-index:99;background:#0a0420;color:#c4b5fd;font-size:11px;font-weight:600;padding:8px 14px;border-radius:99px;text-decoration:none;border:1px solid #7c3aed;box-shadow:0 0 14px rgba(124,58,237,.5)}
+@media(max-width:700px){.hero h1{font-size:36px}nav ul{display:none}.strip{gap:30px}}
+</style>
+</head>
+<body>
+<nav><div class="logo">Spice<span>Route</span></div><ul><li><a href="#s2">Menu</a></li><li><a href="#">Chef's Table</a></li><li><a href="#">Private Dining</a></li><li><a href="#">Contact</a></li></ul><button class="btn">Reserve a Table</button></nav>
+<header class="hero"><div>
+<div class="kick">Est. 2014 · Modern Indian Cuisine</div>
+<h1>A Journey Through India, One Plate at a Time</h1>
+<p>Slow-cooked classics and bold Northeast flavours, reimagined by Chef Arnav Bora in the heart of Guwahati.</p>
+<button class="btn">Book Your Table →</button> <button class="btn ol">View Menu</button>
+</div></header>
+<div class="times"><span>🕐 Lunch <b>12 – 3:30 PM</b></span><span>🕖 Dinner <b>7 – 11 PM</b></span><span>📍 <b>GS Road, Guwahati</b></span><span>📞 <b>+91 98765 43210</b></span></div>
+<section id="s2"><div class="sec-h"><h2>Signature Dishes</h2><p>Seasonal ingredients · Wood-fired kitchen · Plated with obsession</p></div>
+<div class="menu">
+<div class="dish"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=700&q=60" alt="Pizza"><div class="in"><div class="r"><h3>Tandoor Margherita</h3><span class="pr">₹495</span></div><p>Wood-fired sourdough, smoked tomato, burrata, basil from our terrace garden.</p><span class="tag">CHEF'S PICK</span></div></div>
+<div class="dish"><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=700&q=60" alt="Bowl"><div class="in"><div class="r"><h3>Brahmaputra Bowl</h3><span class="pr">₹425</span></div><p>Black rice, smoked duck, fiddlehead fern, bhut jolokia aioli — an ode to Assam.</p><span class="tag">SIGNATURE</span></div></div>
+<div class="dish"><img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=700&q=60" alt="Dessert"><div class="in"><div class="r"><h3>Saffron Malai Stack</h3><span class="pr">₹345</span></div><p>Layered malai pancakes, pistachio crumble, rose-saffron syrup, silver leaf.</p><span class="tag">MUST TRY</span></div></div>
+</div></section>
+<div class="strip"><div><b>4.9★</b><small>4,200+ reviews</small></div><div><b>12</b><small>Award plates</small></div><div><b>40k+</b><small>Guests a year</small></div><div><b>#1</b><small>Fine dining, GHY</small></div></div>
+<section class="book"><h2>Reserve Your Evening</h2><p>Tables fill fast on weekends — book in 20 seconds, no calls needed.</p>
+<div class="form"><input type="date"><select><option>8:00 PM</option><option>8:30 PM</option><option>9:00 PM</option></select><select><option>2 Guests</option><option>4 Guests</option><option>6+ Guests</option></select><button class="btn">Confirm Table →</button></div>
+</section>
+<footer>© 2026 Spice Route Dining Co. · GS Road, Guwahati · hello@spiceroute.in</footer>
+<a class="as01" href="/">⚡ Built by Project AS01</a>
+</body></html>

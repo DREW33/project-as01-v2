@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BigWin Arena — Gaming & Prediction Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#0a0214;color:#efe6ff}
+h1,h2,h3,.dis{font-family:Rajdhani,sans-serif}
+nav{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:14px 5%;background:rgba(10,2,20,.92);backdrop-filter:blur(10px);border-bottom:1px solid #2b1846}
+.logo{font-family:Rajdhani,sans-serif;font-weight:700;font-size:24px;letter-spacing:1px}.logo span{color:#fbbf24}
+nav ul{display:flex;gap:24px;list-style:none}nav a{color:#b9a3e3;text-decoration:none;font-size:14px;font-weight:600}
+.btn{background:linear-gradient(92deg,#f59e0b,#ef4444);color:#fff;border:none;padding:11px 24px;border-radius:9px;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 0 18px rgba(245,158,11,.4)}
+.btn.vio{background:linear-gradient(92deg,#7c3aed,#2563eb);box-shadow:0 0 18px rgba(124,58,237,.4)}
+.hero{position:relative;text-align:center;padding:80px 5% 60px;background:radial-gradient(ellipse at top,#2b1846 0%,#0a0214 60%)}
+.hero h1{font-size:54px;font-weight:700;letter-spacing:1px;line-height:1.05}
+.hero h1 span{background:linear-gradient(92deg,#fbbf24,#ef4444);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:#b9a3e3;margin:16px auto 30px;max-width:560px;font-size:16px}
+.jack{display:inline-block;background:#160a2b;border:1px solid #7c3aed;border-radius:14px;padding:16px 34px;margin-bottom:30px;box-shadow:0 0 30px rgba(124,58,237,.35)}
+.jack small{color:#b9a3e3;letter-spacing:3px;font-size:11px;text-transform:uppercase}
+.jack b{display:block;font-family:Rajdhani,sans-serif;font-size:40px;color:#fbbf24;text-shadow:0 0 20px rgba(251,191,36,.6)}
+.ticker{background:#12062a;border-top:1px solid #2b1846;border-bottom:1px solid #2b1846;padding:11px;overflow:hidden;white-space:nowrap}
+.ticker span{display:inline-block;animation:scroll 22s linear infinite;color:#9ff0c4;font-size:13px}
+@keyframes scroll{from{transform:translateX(15%)}to{transform:translateX(-100%)}}
+section{padding:60px 5%}
+.sec-h{text-align:center;margin-bottom:38px}.sec-h h2{font-size:36px;font-weight:700;letter-spacing:1px}.sec-h p{color:#8d76b8;margin-top:8px}
+.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.game{position:relative;border-radius:16px;padding:30px 22px;text-align:center;border:1px solid #2b1846;background:#12062a;overflow:hidden;transition:transform .3s,box-shadow .3s;cursor:pointer}
+.game:hover{transform:translateY(-6px);box-shadow:0 0 34px rgba(124,58,237,.4)}
+.game .ic{font-size:44px;display:block;margin-bottom:12px}
+.game h3{font-size:20px;letter-spacing:1px}
+.game p{color:#8d76b8;font-size:13px;margin:8px 0 14px}
+.live{position:absolute;top:12px;right:12px;background:#3b0d17;color:#ff7d92;font-size:10px;font-weight:700;padding:4px 10px;border-radius:99px}
+.players{color:#9ff0c4;font-size:12px;font-weight:600}
+.banner{margin:0 5%;border-radius:18px;padding:46px;text-align:center;background:linear-gradient(110deg,rgba(124,58,237,.25),rgba(37,99,235,.25)),url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1300&q=60') center/cover;border:1px solid #2b1846}
+.banner h2{font-size:34px;letter-spacing:1px}
+.banner p{color:#d7c7f5;margin:10px 0 22px}
+.dis{margin:46px 5% 0;text-align:center;color:#6d5896;font-size:12px;letter-spacing:1px}
+footer{text-align:center;padding:26px;color:#6d5896;font-size:12px;background:#070110;margin-top:30px}
+.as01{position:fixed;bottom:14px;left:14px;z-index:99;background:#0a0420;color:#c4b5fd;font-size:11px;font-weight:600;padding:8px 14px;border-radius:99px;text-decoration:none;border:1px solid #7c3aed;box-shadow:0 0 14px rgba(124,58,237,.5)}
+@media(max-width:700px){.hero h1{font-size:34px}nav ul{display:none}}
+</style>
+</head>
+<body>
+<nav><div class="logo">BIG<span>WIN</span> ARENA</div><ul><li><a href="#s2">Games</a></li><li><a href="#">Tournaments</a></li><li><a href="#">Leaderboard</a></li><li><a href="#">Wallet</a></li></ul><button class="btn">Sign Up · Get ₹100</button></nav>
+<header class="hero">
+<div class="jack"><small>⚡ Live Mega Jackpot</small><b id="jackpot">₹24,86,930</b></div>
+<h1>Play. Predict. <span>Win Big.</span></h1>
+<p>Skill-based games, live tournaments and prediction arenas with instant withdrawals. 2.8 lakh players online right now.</p>
+<button class="btn">Play Now →</button> <button class="btn vio">Watch Live Games</button>
+</header>
+<div class="ticker"><span id="winners">🏆 Rahul from Guwahati just won ₹12,400 in Color Rush · 🏆 Priya S. won ₹8,200 in Speed Ludo · 🏆 Aman K. hit a ₹52,000 jackpot in Crash · 🏆 Deepika won ₹6,750 in Rummy Royale · 🏆 Vikash from Jorhat won ₹15,900 in Predictor Pro ·</span></div>
+<section id="s2"><div class="sec-h"><h2>TRENDING GAMES</h2><p>Provably fair · RNG certified · Instant payouts</p></div>
+<div class="games">
+<div class="game"><span class="live">● LIVE</span><span class="ic">🎨</span><h3>COLOR RUSH</h3><p>Predict the next color. 30-second rounds, up to 9x payout.</p><div class="players">👥 48,211 playing</div></div>
+<div class="game"><span class="live">● LIVE</span><span class="ic">🚀</span><h3>CRASH</h3><p>Cash out before the rocket crashes. Multipliers up to 100x.</p><div class="players">👥 31,894 playing</div></div>
+<div class="game"><span class="live">● LIVE</span><span class="ic">🎲</span><h3>SPEED LUDO</h3><p>4-player skill ludo with real opponents. Winner takes the pot.</p><div class="players">👥 22,407 playing</div></div>
+<div class="game"><span class="live">● LIVE</span><span class="ic">🃏</span><h3>RUMMY ROYALE</h3><p>13-card classic rummy tables from ₹10 to ₹10,000 buy-in.</p><div class="players">👥 18,652 playing</div></div>
+<div class="game"><span class="live">● LIVE</span><span class="ic">⚽</span><h3>PREDICTOR PRO</h3><p>Predict live match outcomes with friends and climb the board.</p><div class="players">👥 12,033 playing</div></div>
+<div class="game"><span class="live">● LIVE</span><span class="ic">💣</span><h3>MINES</h3><p>Reveal gems, dodge mines. Every safe tile multiplies your bet.</p><div class="players">👥 9,815 playing</div></div>
+</div></section>
+<div class="banner"><h2>WEEKEND MEGA TOURNAMENT</h2><p>₹50,00,000 prize pool · 10,000 winners · Entry free for new players</p><button class="btn">Register Free →</button></div>
+<p class="dis">18+ ONLY · PLAY RESPONSIBLY · THIS IS A PORTFOLIO DEMO BY PROJECT AS01 — NO REAL MONEY IS INVOLVED</p>
+<footer>© 2026 BigWin Arena (Demo) · RNG Certified UI Concept</footer>
+<a class="as01" href="/">⚡ Built by Project AS01</a>
+<script>
+const j=document.getElementById('jackpot');let v=2486930;
+setInterval(()=>{v+=Math.floor(Math.random()*900)+100;j.textContent='₹'+v.toLocaleString('en-IN')},1500);
+</script>
+</body></html>

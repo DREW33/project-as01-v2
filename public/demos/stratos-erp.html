@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stratos ERP — Manufacturing Suite</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#f1f4f9;color:#1e2533;display:flex;min-height:100vh}
+.side{width:220px;background:#101828;color:#94a3c0;padding:20px 0;flex-shrink:0;display:flex;flex-direction:column}
+.brand{color:#fff;font-weight:700;font-size:18px;padding:0 22px 22px;border-bottom:1px solid #1d2939}
+.brand span{color:#38bdf8}
+.side nav{margin-top:14px}
+.side a{display:flex;gap:10px;padding:11px 22px;color:#94a3c0;text-decoration:none;font-size:13.5px;border-left:3px solid transparent}
+.side a.on{background:#1d2939;color:#fff;border-left-color:#38bdf8}
+.side a:hover{color:#fff}
+.user{margin-top:auto;padding:16px 22px;border-top:1px solid #1d2939;font-size:12px}
+.user b{color:#fff;display:block;font-size:13px}
+.main{flex:1;padding:22px 26px;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:14px;flex-wrap:wrap}
+.top h1{font-size:20px}
+.top .crumb{color:#8a94a8;font-size:12px;margin-top:3px}
+.actions{display:flex;gap:10px}
+.btn{background:#2563eb;color:#fff;border:none;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
+.btn.lt{background:#fff;color:#374151;border:1px solid #dde3ee}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:20px}
+.card{background:#fff;border-radius:12px;padding:16px;border:1px solid #e7ecf4}
+.card small{color:#8a94a8;font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.card b{display:block;font-size:24px;margin-top:6px}
+.card .d{font-size:11.5px;margin-top:6px;font-weight:600}
+.up{color:#16a34a}.dn{color:#dc2626}
+.row2{display:grid;grid-template-columns:1.5fr 1fr;gap:14px;margin-bottom:20px}
+.panel{background:#fff;border-radius:12px;border:1px solid #e7ecf4;padding:18px}
+.panel h3{font-size:14px;margin-bottom:14px}
+.chart{display:flex;align-items:flex-end;gap:9px;height:150px}
+.chart .b{flex:1;background:linear-gradient(180deg,#3b82f6,#2563eb);border-radius:5px 5px 0 0;position:relative}
+.chart .b.g{background:linear-gradient(180deg,#34d399,#10b981)}
+.chart-l{display:flex;gap:9px;margin-top:7px}
+.chart-l span{flex:1;text-align:center;font-size:10px;color:#8a94a8}
+.donut{width:130px;height:130px;border-radius:50%;background:conic-gradient(#2563eb 0 38%,#38bdf8 38% 64%,#34d399 64% 82%,#fbbf24 82% 100%);margin:6px auto;position:relative}
+.donut::after{content:"82%";position:absolute;inset:26px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px}
+.leg{font-size:11.5px;color:#5b6478;display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.leg i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:#8a94a8;font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:8px 10px;border-bottom:1px solid #e7ecf4}
+td{padding:11px 10px;border-bottom:1px solid #f1f4f9}
+.st{font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px}
+.ok{background:#dcfce7;color:#15803d}.wa{background:#fef3c7;color:#a16207}.cr{background:#fee2e2;color:#b91c1c}
+.as01{position:fixed;bottom:14px;left:14px;z-index:99;background:#0a0420;color:#c4b5fd;font-size:11px;font-weight:600;padding:8px 14px;border-radius:99px;text-decoration:none;border:1px solid #7c3aed;box-shadow:0 0 14px rgba(124,58,237,.5)}
+@media(max-width:860px){.side{display:none}.row2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<aside class="side">
+<div class="brand">⬢ Stratos<span>ERP</span></div>
+<nav>
+<a class="on" href="#">📊 Dashboard</a><a href="#">📦 Inventory</a><a href="#">🏭 Production</a><a href="#">🛒 Procurement</a><a href="#">🚚 Dispatch</a><a href="#">👥 HR &amp; Payroll</a><a href="#">🧾 GST Accounting</a><a href="#">⚙️ Settings</a>
+</nav>
+<div class="user"><b>Bikash Sharma</b>Plant Manager · Unit 2</div>
+</aside>
+<main class="main" id="s2">
+<div class="top"><div><h1>Production Dashboard</h1><div class="crumb">Home / Dashboard · Updated 2 min ago</div></div>
+<div class="actions"><button class="btn lt">⬇ Export</button><button class="btn">+ New Work Order</button></div></div>
+<div class="cards">
+<div class="card"><small>Today's Production</small><b>14,280 units</b><div class="d up">▲ 8.2% vs yesterday</div></div>
+<div class="card"><small>Inventory Value</small><b>₹4.62 Cr</b><div class="d up">▲ 2.1% this week</div></div>
+<div class="card"><small>Pending Orders</small><b>37</b><div class="d dn">▼ 5 overdue</div></div>
+<div class="card"><small>Machine Uptime</small><b>96.4%</b><div class="d up">▲ Target 95%</div></div>
+</div>
+<div class="row2">
+<div class="panel"><h3>Weekly Output (units)</h3>
+<div class="chart"><div class="b" style="height:55%"></div><div class="b" style="height:68%"></div><div class="b g" style="height:74%"></div><div class="b" style="height:62%"></div><div class="b g" style="height:88%"></div><div class="b" style="height:79%"></div><div class="b g" style="height:96%"></div></div>
+<div class="chart-l"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+</div>
+<div class="panel"><h3>Capacity Utilisation</h3><div class="donut"></div>
+<div class="leg"><span><i style="background:#2563eb"></i>Line A — 38%</span><span><i style="background:#38bdf8"></i>Line B — 26%</span><span><i style="background:#34d399"></i>Line C — 18%</span><span><i style="background:#fbbf24"></i>Idle — 18%</span></div>
+</div>
+</div>
+<div class="panel"><h3>Active Work Orders</h3>
+<table>
+<tr><th>Order ID</th><th>Product</th><th>Qty</th><th>Line</th><th>Due</th><th>Status</th></tr>
+<tr><td>#WO-2841</td><td>PVC Pipe 110mm</td><td>5,000</td><td>Line A</td><td>Today</td><td><span class="st ok">On Track</span></td></tr>
+<tr><td>#WO-2842</td><td>Fitting Elbow 90°</td><td>12,000</td><td>Line B</td><td>Tomorrow</td><td><span class="st ok">On Track</span></td></tr>
+<tr><td>#WO-2839</td><td>Water Tank 1000L</td><td>240</td><td>Line C</td><td>Today</td><td><span class="st wa">Material Low</span></td></tr>
+<tr><td>#WO-2835</td><td>PVC Sheet 8x4</td><td>1,800</td><td>Line A</td><td>Overdue</td><td><span class="st cr">Delayed</span></td></tr>
+</table>
+</div>
+</main>
+<a class="as01" href="/">⚡ Built by Project AS01</a>
+</body></html>
