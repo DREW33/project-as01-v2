@@ -90,7 +90,7 @@ export default function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 40, scale: 0.92 }}
             transition={{ type: "spring", damping: 26, stiffness: 300 }}
-            className="glass-strong fixed bottom-24 right-5 z-[70] flex h-[480px] w-[calc(100vw-2.5rem)] max-w-sm flex-col overflow-hidden rounded-3xl shadow-[0_20px_80px_rgba(0,0,0,0.7)] md:right-7"
+            className="glass-strong fixed bottom-24 right-4 z-[70] flex h-[min(480px,calc(100dvh-8rem))] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-3xl shadow-[0_20px_80px_rgba(0,0,0,0.7)] md:right-7"
           >
             <div className="flex items-center gap-3 border-b border-white/10 bg-gradient-to-r from-purple-900/40 to-blue-900/40 px-5 py-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-500 text-lg shadow-[0_0_18px_rgba(147,51,234,0.6)]">

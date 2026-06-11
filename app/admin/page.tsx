@@ -37,30 +37,43 @@ export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
   const [pass, setPass] = useState("");
   const [error, setError] = useState(false);
+  const [checking, setChecking] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [tab, setTab] = useState<"leads" | "calls" | "analytics">("leads");
 
   useEffect(() => {
-    if (sessionStorage.getItem("as01_admin") === "1") setAuthed(true);
+    if (sessionStorage.getItem("as01_admin_key")) setAuthed(true);
   }, []);
 
   useEffect(() => {
     if (!authed) return;
-    fetch("/api/leads")
+    fetch("/api/leads", {
+      headers: { "x-admin-key": sessionStorage.getItem("as01_admin_key") ?? "" },
+    })
       .then((r) => r.json())
       .then((d) => setLeads(d.leads ?? []))
       .catch(() => {});
   }, [authed]);
 
-  const login = (e: React.FormEvent) => {
+  const login = async (e: React.FormEvent) => {
     e.preventDefault();
-    // demo gate — replace with JWT + role-based auth in production
-    if (pass === "as01admin") {
-      sessionStorage.setItem("as01_admin", "1");
-      setAuthed(true);
-    } else {
+    setChecking(true);
+    try {
+      const r = await fetch("/api/admin-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: pass }),
+      });
+      if (r.ok) {
+        sessionStorage.setItem("as01_admin_key", pass);
+        setAuthed(true);
+      } else {
+        setError(true);
+      }
+    } catch {
       setError(true);
     }
+    setChecking(false);
   };
 
   if (!authed) {
@@ -73,9 +86,7 @@ export default function AdminPage() {
         >
           <Logo />
           <h1 className="font-display mt-6 text-xl font-bold text-white">Admin Access</h1>
-          <p className="mt-2 text-xs text-slate-500">
-            Demo password: <code className="rounded bg-white/10 px-1.5 py-0.5 text-purple-300">as01admin</code>
-          </p>
+          <p className="mt-2 text-xs text-slate-500">Authorized personnel only.</p>
           <form onSubmit={login} className="mt-6 space-y-4">
             <input
               type="password"
@@ -88,8 +99,11 @@ export default function AdminPage() {
               }}
             />
             {error && <p className="text-xs text-red-400">Access denied. Try again.</p>}
-            <button className="btn-neon font-display w-full rounded-xl px-6 py-3 text-xs font-bold uppercase tracking-wider text-white">
-              Enter Dashboard
+            <button
+              disabled={checking}
+              className="btn-neon font-display w-full rounded-xl px-6 py-3 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-60"
+            >
+              {checking ? "Verifying…" : "Enter Dashboard"}
             </button>
           </form>
           <Link href="/" className="mt-5 block text-xs text-slate-500 transition hover:text-white">
@@ -123,7 +137,7 @@ export default function AdminPage() {
             </Link>
             <button
               onClick={() => {
-                sessionStorage.removeItem("as01_admin");
+                sessionStorage.removeItem("as01_admin_key");
                 setAuthed(false);
               }}
               className="btn-ghost rounded-full px-4 py-2 text-xs font-semibold text-white"
