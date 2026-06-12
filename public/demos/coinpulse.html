@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CoinPulse — Crypto & Finance Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'IBM Plex Sans',sans-serif;background:#0a0e14;color:#e8edf4}
+.mono{font-family:'IBM Plex Mono',monospace}
+nav{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:14px 5%;background:rgba(10,14,20,.93);backdrop-filter:blur(10px);border-bottom:1px solid #1a2230}
+.logo{font-weight:700;font-size:22px}.logo span{color:#f7931a}
+nav ul{display:flex;gap:24px;list-style:none}nav a{color:#8b97ab;text-decoration:none;font-size:14px;font-weight:600}
+.btn{background:#f7931a;color:#13110a;border:none;padding:11px 22px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;font-family:'IBM Plex Sans'}
+.ticker{background:#0d1320;border-bottom:1px solid #1a2230;padding:10px;overflow:hidden;white-space:nowrap}
+.ticker span{display:inline-block;animation:scr 26s linear infinite;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:#9aa8bd}
+@keyframes scr{from{transform:translateX(8%)}to{transform:translateX(-100%)}}
+.up{color:#23c16b}.dn{color:#f6465d}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center;padding:50px 5%}
+.hero h1{font-size:44px;font-weight:700;line-height:1.1}
+.hero h1 span{color:#f7931a}
+.hero p{color:#8b97ab;margin:16px 0 24px;font-size:16px}
+/* portfolio card */
+.pcard{background:#0f1622;border:1px solid #1c2738;border-radius:16px;padding:22px}
+.pcard small{color:#8b97ab;font-size:12px;text-transform:uppercase;letter-spacing:1px}
+.pcard .bal{font-size:34px;font-weight:700;font-family:'IBM Plex Mono',monospace;margin:6px 0}
+.pcard .pl{font-size:13px;font-weight:700}
+.spark{display:flex;align-items:flex-end;gap:3px;height:64px;margin-top:16px}
+.spark i{flex:1;background:linear-gradient(180deg,#23c16b,#0e5e34);border-radius:2px 2px 0 0}
+.assets{margin-top:18px}
+.arow{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-top:1px solid #1c2738;font-size:14px}
+.coin{display:flex;align-items:center;gap:10px;font-weight:600}
+.cic{width:30px;height:30px;border-radius:99px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.arow .mono{font-size:13.5px}
+section{padding:54px 5%}
+.sec-h{text-align:center;margin-bottom:36px}.sec-h h2{font-size:32px;font-weight:700}.sec-h p{color:#8b97ab;margin-top:8px}
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.feat{background:#0f1622;border:1px solid #1c2738;border-radius:14px;padding:24px;transition:transform .25s,border-color .25s}
+.feat:hover{transform:translateY(-4px);border-color:#f7931a}
+.feat .ic{font-size:28px}.feat h3{margin:10px 0 6px;font-size:16px}.feat p{color:#8b97ab;font-size:13.5px;line-height:1.6}
+.strip{display:flex;justify-content:center;gap:64px;background:#0d1320;border-block:1px solid #1a2230;padding:40px 5%;flex-wrap:wrap;text-align:center}
+.strip b{display:block;font-size:28px;color:#f7931a;font-family:'IBM Plex Mono',monospace}
+.strip small{color:#8b97ab;font-size:12px}
+footer{text-align:center;padding:24px;color:#5c6675;font-size:12px;background:#070a0f}
+.dis{text-align:center;color:#5c6675;font-size:11px;letter-spacing:1px;padding:20px 5% 0}
+.as01{position:fixed;bottom:14px;left:14px;z-index:99;background:#0a0420;color:#c4b5fd;font-size:11px;font-weight:600;padding:8px 14px;border-radius:99px;text-decoration:none;border:1px solid #7c3aed;box-shadow:0 0 14px rgba(124,58,237,.5)}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.hero h1{font-size:30px}nav ul{display:none}.strip{gap:28px}}
+</style>
+</head>
+<body>
+<nav><div class="logo">Coin<span>Pulse</span></div><ul><li><a href="#s2">Markets</a></li><li><a href="#">Portfolio</a></li><li><a href="#">Earn</a></li><li><a href="#">Learn</a></li></ul><button class="btn">Get Started</button></nav>
+<div class="ticker"><span id="tape">BTC <b class="up">$112,480 ▲2.4%</b> · ETH <b class="up">$4,212 ▲1.8%</b> · SOL <b class="dn">$218 ▼0.6%</b> · BNB <b class="up">$742 ▲0.9%</b> · XRP <b class="up">$2.94 ▲4.1%</b> · DOGE <b class="dn">$0.31 ▼1.2%</b> · ADA <b class="up">$1.12 ▲2.0%</b> · MATIC <b class="up">$0.88 ▲3.3%</b> ·</span></div>
+<header class="hero">
+<div><h1>Track Every Coin. <span>Miss Nothing.</span></h1>
+<p>Real-time prices, portfolio tracking, smart alerts and tax-ready reports — 12,000+ coins in one clean dashboard built for Indian investors.</p>
+<button class="btn">Start Free →</button>
+</div>
+<div class="pcard">
+<small>Total Portfolio Value</small>
+<div class="bal" id="bal">₹8,42,560</div>
+<div class="pl up">▲ +₹24,180 (2.96%) today</div>
+<div class="spark">
+<i style="height:34%"></i><i style="height:42%"></i><i style="height:38%"></i><i style="height:55%"></i><i style="height:48%"></i><i style="height:62%"></i><i style="height:58%"></i><i style="height:70%"></i><i style="height:66%"></i><i style="height:78%"></i><i style="height:84%"></i><i style="height:80%"></i><i style="height:92%"></i><i style="height:100%"></i>
+</div>
+<div class="assets">
+<div class="arow"><span class="coin"><span class="cic" style="background:#3a2c12">₿</span>Bitcoin</span><span class="mono">0.042 BTC</span><span class="mono up">▲2.4%</span></div>
+<div class="arow"><span class="coin"><span class="cic" style="background:#1c2747">Ξ</span>Ethereum</span><span class="mono">1.85 ETH</span><span class="mono up">▲1.8%</span></div>
+<div class="arow"><span class="coin"><span class="cic" style="background:#11313a">◎</span>Solana</span><span class="mono">28.4 SOL</span><span class="mono dn">▼0.6%</span></div>
+</div>
+</div>
+</header>
+<div class="strip"><div><b>12,000+</b><small>Coins tracked</small></div><div><b>2.1L</b><small>Indian investors</small></div><div><b>&lt;1s</b><small>Price latency</small></div><div><b>100%</b><small>Tax-report ready</small></div></div>
+<section id="s2"><div class="sec-h"><h2>Built for Serious Tracking</h2><p>Everything you need, nothing you don't</p></div>
+<div class="feats">
+<div class="feat"><div class="ic">⚡</div><h3>Live Price Alerts</h3><p>Telegram + push alerts the second your coin crosses your target price.</p></div>
+<div class="feat"><div class="ic">📊</div><h3>P&L Analytics</h3><p>Realized & unrealized gains across every exchange and wallet, auto-synced.</p></div>
+<div class="feat"><div class="ic">🧾</div><h3>Crypto Tax Reports</h3><p>One-click 30%-rule compliant reports for Indian ITR filing.</p></div>
+<div class="feat"><div class="ic">🔐</div><h3>Read-Only Security</h3><p>API keys are read-only and encrypted — we can never touch your funds.</p></div>
+</div></section>
+<p class="dis">DEMO BY PROJECT AS01 · PRICES ILLUSTRATIVE · CRYPTO INVESTMENTS ARE SUBJECT TO MARKET RISK</p>
+<footer>© 2026 CoinPulse Analytics (Demo)</footer>
+<a class="as01" href="/">⚡ Built by Project AS01</a>
+<script>
+const bal=document.getElementById('bal');let v=842560;
+setInterval(()=>{v+=Math.floor(Math.random()*1400)-600;bal.textContent='₹'+v.toLocaleString('en-IN')},1800);
+</script>
+</body></html>

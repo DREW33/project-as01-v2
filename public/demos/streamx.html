@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StreamX — Northeast Stories, Streaming Now</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Archivo,sans-serif;background:#08080d;color:#f1f1f5}
+nav{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:14px 5%;background:linear-gradient(180deg,rgba(8,8,13,.95),rgba(8,8,13,.75));backdrop-filter:blur(8px)}
+.logo{font-weight:900;font-size:24px;letter-spacing:1px}.logo span{color:#e50914}
+nav ul{display:flex;gap:24px;list-style:none}nav a{color:#b9b9c7;text-decoration:none;font-size:14px;font-weight:700}
+.btn{background:#e50914;color:#fff;border:none;padding:11px 26px;border-radius:6px;font-weight:900;font-size:14px;cursor:pointer;font-family:Archivo}
+.btn.gl{background:rgba(255,255,255,.12);backdrop-filter:blur(6px)}
+.hero{position:relative;min-height:74vh;display:flex;align-items:flex-end;padding:0 5% 60px;background:linear-gradient(180deg,rgba(8,8,13,.2),rgba(8,8,13,.95)),url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1400&q=60') center/cover}
+.tag{display:inline-block;background:#e50914;font-size:11px;font-weight:900;padding:4px 12px;border-radius:4px;letter-spacing:1px;margin-bottom:14px}
+.hero h1{font-size:54px;font-weight:900;line-height:1.05;max-width:640px}
+.hero p{color:#c9c9d6;margin:14px 0 24px;max-width:520px;font-size:16px}
+.meta{display:flex;gap:16px;color:#9a9aac;font-size:13px;font-weight:700;margin-bottom:22px}
+.meta b{color:#46d369}
+section{padding:36px 5%}
+section h2{font-size:22px;font-weight:900;margin-bottom:16px}
+.row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.card{position:relative;aspect-ratio:2/3;border-radius:10px;overflow:hidden;cursor:pointer;transition:transform .25s;display:flex;align-items:flex-end;padding:14px}
+.card:hover{transform:scale(1.05)}
+.card h3{font-size:15px;font-weight:900;z-index:1;text-shadow:0 2px 8px rgba(0,0,0,.8)}
+.card .top{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.6);font-size:10px;font-weight:900;padding:3px 8px;border-radius:4px;color:#ffd60a}
+.card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.85))}
+.g1{background:linear-gradient(135deg,#7f1d1d,#e50914)}
+.g2{background:linear-gradient(135deg,#1e3a8a,#38bdf8)}
+.g3{background:linear-gradient(135deg,#14532d,#46d369)}
+.g4{background:linear-gradient(135deg,#581c87,#a855f7)}
+.g5{background:linear-gradient(135deg,#7c2d12,#fb923c)}
+.g6{background:linear-gradient(135deg,#0e7490,#67e8f9)}
+.live{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px}
+.ch{flex:0 0 200px;background:#13131c;border:1px solid #23232f;border-radius:12px;padding:14px;display:flex;align-items:center;gap:10px}
+.dot{width:8px;height:8px;border-radius:99px;background:#e50914;animation:bl 1.2s infinite}
+@keyframes bl{50%{opacity:.3}}
+.ch b{font-size:13px;display:block}.ch small{color:#9a9aac;font-size:11px}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;max-width:900px;margin:0 auto}
+.plan{background:#13131c;border:1px solid #23232f;border-radius:14px;padding:26px;text-align:center}
+.plan.hot{border-color:#e50914;box-shadow:0 0 30px rgba(229,9,20,.25)}
+.plan h3{font-size:16px;font-weight:900}.plan .pr{font-size:30px;font-weight:900;margin:10px 0;color:#e50914}
+.plan small{color:#9a9aac;font-size:12.5px;line-height:1.8;display:block}
+footer{text-align:center;padding:26px;color:#62626f;font-size:13px;background:#050508;margin-top:30px}
+.as01{position:fixed;bottom:14px;left:14px;z-index:99;background:#0a0420;color:#c4b5fd;font-size:11px;font-weight:600;padding:8px 14px;border-radius:99px;text-decoration:none;border:1px solid #7c3aed;box-shadow:0 0 14px rgba(124,58,237,.5)}
+@media(max-width:700px){.hero h1{font-size:34px}nav ul{display:none}}
+</style>
+</head>
+<body>
+<nav><div class="logo">STREAM<span>X</span></div><ul><li><a href="#s2">Browse</a></li><li><a href="#">Live TV</a></li><li><a href="#">Originals</a></li><li><a href="#">Kids</a></li></ul><button class="btn">Start ₹99/mo</button></nav>
+<header class="hero"><div>
+<span class="tag">STREAMX ORIGINAL</span>
+<h1>Brahmaputra: The River Remembers</h1>
+<div class="meta"><b>97% Match</b><span>2026</span><span>8 Episodes</span><span>4K · Dolby</span><span>অসমীয়া + 6 languages</span></div>
+<p>A sweeping documentary-drama following four families whose lives bend with the great river — from Majuli's monasteries to Guwahati's ghats.</p>
+<button class="btn">▶ Play Now</button> <button class="btn gl">+ My List</button>
+</div></header>
+<section id="s2"><h2>Trending Now 🔥</h2>
+<div class="row">
+<div class="card g1"><span class="top">★ 9.1</span><h3>Tezpur Nights</h3></div>
+<div class="card g2"><span class="top">★ 8.7</span><h3>Hornbill Diaries</h3></div>
+<div class="card g3"><span class="top">★ 8.9</span><h3>The Tea Estate</h3></div>
+<div class="card g4"><span class="top">★ 9.3</span><h3>Bihu Beats</h3></div>
+<div class="card g5"><span class="top">★ 8.4</span><h3>Kaziranga 24x7</h3></div>
+<div class="card g6"><span class="top">★ 8.8</span><h3>Shillong Sessions</h3></div>
+</div></section>
+<section><h2>Live Channels 📡</h2>
+<div class="live">
+<div class="ch"><span class="dot"></span><div><b>NE News 24</b><small>42k watching</small></div></div>
+<div class="ch"><span class="dot"></span><div><b>Bihu FM Live</b><small>18k watching</small></div></div>
+<div class="ch"><span class="dot"></span><div><b>Sports Arena</b><small>67k watching</small></div></div>
+<div class="ch"><span class="dot"></span><div><b>Cinema Axom</b><small>25k watching</small></div></div>
+</div></section>
+<section><h2 style="text-align:center">Choose Your Plan</h2>
+<div class="plans">
+<div class="plan"><h3>Mobile</h3><div class="pr">₹99</div><small>1 screen · 720p<br>Phone & tablet only</small></div>
+<div class="plan hot"><h3>Family</h3><div class="pr">₹249</div><small>4 screens · 4K + Dolby<br>All devices · Downloads</small></div>
+<div class="plan"><h3>Standard</h3><div class="pr">₹149</div><small>2 screens · 1080p<br>All devices</small></div>
+</div></section>
+<footer>© 2026 StreamX Media (Demo) · Streaming Northeast stories to the world</footer>
+<a class="as01" href="/">⚡ Built by Project AS01</a>
+</body></html>

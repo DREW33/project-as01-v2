@@ -23,6 +23,12 @@ export const categories = [
   "ERP & CRM",
   "Restaurant",
   "Mobile Apps",
+  "Social & Community",
+  "Streaming & Media",
+  "Crypto & Finance",
+  "Developer & SEO Tools",
+  "Marketing & Automation",
+  "Cloud & Storage",
 ] as const;
 
 export const projects: Project[] = [
@@ -223,6 +229,114 @@ export const projects: Project[] = [
       { label: "Captains", value: "8,500" },
     ],
     demoUrl: "/demos/zoomride.html",
+  },
+  {
+    id: "loopin",
+    title: "LoopIn",
+    category: "Social & Community",
+    tagline: "Social network for Northeast India",
+    description:
+      "A community-first social platform with local feeds, 1,800+ interest groups, events and creator profiles — built to scale to lakhs of members.",
+    caseStudy:
+      "LoopIn wanted a social network that felt local, not like a Facebook clone. We built community-scoped feeds, event RSVPs and creator tools with infinite-scroll performance on budget Android phones. The platform grew to 4.2 lakh members with 1,800+ active communities, and average session time is 23 minutes — social-giant territory.",
+    tech: ["Next.js", "Node.js", "PostgreSQL", "Redis", "WebSockets", "AWS"],
+    accent: "from-rose-500 via-pink-500 to-purple-500",
+    stats: [
+      { label: "Members", value: "4.2L+" },
+      { label: "Communities", value: "1,800+" },
+      { label: "Avg. session", value: "23 min" },
+    ],
+    demoUrl: "/demos/loopin.html",
+  },
+  {
+    id: "streamx",
+    title: "StreamX",
+    category: "Streaming & Media",
+    tagline: "OTT streaming platform with live TV",
+    description:
+      "A Netflix-style OTT platform streaming Northeast stories — originals, live channels, multi-language audio, 4K playback and subscription plans from ₹99.",
+    caseStudy:
+      "StreamX needed OTT infrastructure on a regional budget: adaptive bitrate streaming for weak networks, DRM-protected content, live TV channels and UPI-first subscriptions. We shipped apps for web, Android and TV. The platform streams to 1.8 lakh subscribers with 99.9% playback success even on 3G connections.",
+    tech: ["Next.js", "Node.js", "HLS/FFmpeg", "PostgreSQL", "Razorpay", "CDN"],
+    accent: "from-red-600 via-rose-500 to-orange-400",
+    stats: [
+      { label: "Subscribers", value: "1.8L" },
+      { label: "Playback success", value: "99.9%" },
+      { label: "Languages", value: "7" },
+    ],
+    demoUrl: "/demos/streamx.html",
+  },
+  {
+    id: "coinpulse",
+    title: "CoinPulse",
+    category: "Crypto & Finance",
+    tagline: "Crypto portfolio & market tracker",
+    description:
+      "Real-time crypto tracking for 12,000+ coins — live portfolio P&L, price alerts via Telegram, and one-click Indian crypto tax reports.",
+    caseStudy:
+      "CoinPulse serves Indian crypto investors who juggle multiple exchanges. We built read-only exchange syncing, sub-second price streaming over WebSockets, smart alerts and 30%-tax-rule compliant ITR reports. 2.1 lakh investors track ₹400Cr+ in assets, and the tax-report feature alone drives 40% of paid conversions.",
+    tech: ["React", "Node.js", "WebSockets", "TimescaleDB", "Telegram API"],
+    accent: "from-amber-500 via-orange-500 to-yellow-400",
+    stats: [
+      { label: "Investors", value: "2.1L" },
+      { label: "Coins tracked", value: "12k+" },
+      { label: "Price latency", value: "<1s" },
+    ],
+    demoUrl: "/demos/coinpulse.html",
+  },
+  {
+    id: "rankforge",
+    title: "RankForge",
+    category: "Developer & SEO Tools",
+    tagline: "SEO audit & rank-tracking SaaS",
+    description:
+      "A developer-friendly SEO suite — 38-point site audits in 30 seconds, daily rank tracking, keyword research and Core Web Vitals monitoring.",
+    caseStudy:
+      "RankForge replaces six marketing subscriptions with one suite. We engineered a crawler that audits 142 pages in 30 seconds, city-level rank tracking for Indian keywords and plain-English fix-it reports that non-developers understand. 1.4 million sites audited, and agencies resell the white-label reports to their own clients.",
+    tech: ["Next.js", "Node.js", "Puppeteer", "PostgreSQL", "Redis", "OpenAI"],
+    accent: "from-emerald-500 via-green-500 to-teal-400",
+    stats: [
+      { label: "Sites audited", value: "1.4M" },
+      { label: "Checks per scan", value: "38" },
+      { label: "Scan time", value: "30s" },
+    ],
+    demoUrl: "/demos/rankforge.html",
+  },
+  {
+    id: "mailmint",
+    title: "MailMint",
+    category: "Marketing & Automation",
+    tagline: "Email, WhatsApp & SMS automation",
+    description:
+      "Marketing automation that runs while you sleep — welcome series, abandoned-cart recovery and win-back flows across email, WhatsApp and SMS.",
+    caseStudy:
+      "MailMint gives small Indian stores enterprise-grade automation in a 10-minute setup. We built a visual flow builder, WhatsApp Business API integration (64% open rates) and rupee-denominated revenue attribution per automation. 2,400 businesses have recovered ₹14Cr+ in abandoned-cart revenue alone.",
+    tech: ["Next.js", "Node.js", "WhatsApp API", "PostgreSQL", "Redis", "Claude API"],
+    accent: "from-violet-600 via-purple-500 to-fuchsia-400",
+    stats: [
+      { label: "Revenue recovered", value: "₹14Cr+" },
+      { label: "WhatsApp opens", value: "64%" },
+      { label: "Businesses", value: "2,400+" },
+    ],
+    demoUrl: "/demos/mailmint.html",
+  },
+  {
+    id: "cloudvault",
+    title: "CloudVault",
+    category: "Cloud & Storage",
+    tagline: "Encrypted cloud storage for teams",
+    description:
+      "End-to-end encrypted file storage and sync with team spaces, smart share links, version history — data stored only in Indian data centers.",
+    caseStudy:
+      "CloudVault targets Indian legal and finance teams who can't put files on foreign clouds. We built zero-knowledge encryption, Mumbai-region storage, role-based team spaces and expiring password-protected share links. Enterprise clients migrated 2.4 PB of data, and the India-only data residency is the #1 cited reason for switching.",
+    tech: ["Next.js", "Node.js", "S3-compatible storage", "PostgreSQL", "Docker"],
+    accent: "from-sky-500 via-blue-500 to-indigo-500",
+    stats: [
+      { label: "Data stored", value: "2.4 PB" },
+      { label: "Sync speed", value: "<3s" },
+      { label: "Uptime", value: "99.99%" },
+    ],
+    demoUrl: "/demos/cloudvault.html",
   },
 ];
 

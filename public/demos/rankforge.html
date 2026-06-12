@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RankForge — SEO & Developer Tools Suite</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Lexend,sans-serif;background:#f7f9fc;color:#15223b}
+nav{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:14px 5%;background:rgba(247,249,252,.93);backdrop-filter:blur(10px);border-bottom:1px solid #e6ecf5}
+.logo{font-weight:800;font-size:22px}.logo span{color:#10b981}
+nav ul{display:flex;gap:24px;list-style:none}nav a{color:#5a6b8c;text-decoration:none;font-size:14px;font-weight:600}
+.btn{background:#10b981;color:#fff;border:none;padding:11px 24px;border-radius:10px;font-weight:800;font-size:14px;cursor:pointer;font-family:Lexend}
+.btn.dark{background:#15223b}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;padding:54px 5%}
+.hero h1{font-size:46px;font-weight:800;line-height:1.08}
+.hero h1 span{color:#10b981}
+.hero p{color:#5a6b8c;margin:16px 0 24px;font-size:16.5px}
+.urlbox{display:flex;gap:8px;background:#fff;border:2px solid #15223b;border-radius:14px;padding:8px;box-shadow:6px 6px 0 #15223b}
+.urlbox input{flex:1;border:none;outline:none;padding:10px 12px;font-size:14px;font-family:'Fira Code',monospace}
+/* audit card */
+.audit{background:#fff;border:1px solid #e6ecf5;border-radius:18px;padding:24px;box-shadow:0 16px 50px rgba(21,34,59,.1)}
+.audit .top{display:flex;align-items:center;gap:20px}
+.gauge{position:relative;width:110px;height:110px;border-radius:50%;background:conic-gradient(#10b981 0 92%,#e6ecf5 92% 100%);flex-shrink:0}
+.gauge::after{content:"92";position:absolute;inset:12px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:#10b981}
+.audit h3{font-size:16px}.audit small{color:#5a6b8c;font-size:12.5px;font-family:'Fira Code',monospace}
+.checks{margin-top:18px}
+.chk{display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #eef2f8;font-size:13.5px}
+.ok{color:#10b981;font-weight:700}.warn{color:#d97706;font-weight:700}
+section{padding:54px 5%}
+.sec-h{text-align:center;margin-bottom:36px}.sec-h h2{font-size:32px;font-weight:800}.sec-h p{color:#5a6b8c;margin-top:8px}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.tool{background:#fff;border:1px solid #e6ecf5;border-radius:16px;padding:24px;transition:transform .25s,box-shadow .25s}
+.tool:hover{transform:translateY(-5px);box-shadow:0 14px 40px rgba(16,185,129,.16)}
+.tool .ic{width:44px;height:44px;background:#e7f9f1;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:21px;margin-bottom:12px}
+.tool h3{font-size:16px;font-weight:800}.tool p{color:#5a6b8c;font-size:13.5px;margin-top:6px;line-height:1.6}
+.strip{display:flex;justify-content:center;gap:64px;background:#15223b;color:#fff;padding:42px 5%;flex-wrap:wrap;text-align:center}
+.strip b{display:block;font-size:28px;color:#34d399}
+.strip small{color:#8fa0bf;font-size:12px}
+.cta{text-align:center;padding:60px 5%;background:#e7f9f1}
+.cta h2{font-size:32px;font-weight:800;margin-bottom:10px}.cta p{color:#5a6b8c;margin-bottom:24px}
+footer{background:#0f1830;color:#8fa0bf;text-align:center;padding:26px;font-size:13px}
+.as01{position:fixed;bottom:14px;left:14px;z-index:99;background:#0a0420;color:#c4b5fd;font-size:11px;font-weight:600;padding:8px 14px;border-radius:99px;text-decoration:none;border:1px solid #7c3aed;box-shadow:0 0 14px rgba(124,58,237,.5)}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.hero h1{font-size:30px}nav ul{display:none}.strip{gap:28px}}
+</style>
+</head>
+<body>
+<nav><div class="logo">Rank<span>Forge</span></div><ul><li><a href="#s2">Tools</a></li><li><a href="#">Pricing</a></li><li><a href="#">API</a></li><li><a href="#">Docs</a></li></ul><button class="btn">Try Free</button></nav>
+<header class="hero">
+<div><h1>Find Out Why You're <span>Not Ranking #1</span></h1>
+<p>Audit any website in 30 seconds — SEO score, Core Web Vitals, broken links, keywords and a fix-it checklist your developer will actually understand.</p>
+<div class="urlbox"><input value="https://yourwebsite.com" readonly><button class="btn">Audit Free →</button></div>
+</div>
+<div class="audit">
+<div class="top"><div class="gauge"></div><div><h3>spiceroute.in — Audit Report</h3><small>Scanned 142 pages · 30 Apr 2026</small></div></div>
+<div class="checks">
+<div class="chk"><span>✅ Core Web Vitals (LCP 1.2s)</span><span class="ok">PASS</span></div>
+<div class="chk"><span>✅ Mobile usability</span><span class="ok">PASS</span></div>
+<div class="chk"><span>✅ Schema markup found</span><span class="ok">PASS</span></div>
+<div class="chk"><span>⚠️ 3 images missing alt text</span><span class="warn">FIX</span></div>
+<div class="chk"><span>⚠️ 1 broken outbound link</span><span class="warn">FIX</span></div>
+</div>
+</div>
+</header>
+<div class="strip"><div><b>1.4M</b><small>Sites audited</small></div><div><b>38</b><small>Checks per scan</small></div><div><b>30s</b><small>Avg. scan time</small></div><div><b>4.9★</b><small>Dev rating</small></div></div>
+<section id="s2"><div class="sec-h"><h2>One Suite, Every Tool</h2><p>Stop juggling 6 subscriptions</p></div>
+<div class="tools">
+<div class="tool"><div class="ic">🔍</div><h3>Site Auditor</h3><p>38-point technical SEO scan with prioritized, plain-English fixes.</p></div>
+<div class="tool"><div class="ic">📈</div><h3>Rank Tracker</h3><p>Daily Google position tracking for your keywords — city-level, including Guwahati.</p></div>
+<div class="tool"><div class="ic">🔑</div><h3>Keyword Finder</h3><p>Low-competition keywords with real Indian search volumes.</p></div>
+<div class="tool"><div class="ic">⚡</div><h3>Speed Lab</h3><p>Core Web Vitals monitoring with alerts before Google notices a slowdown.</p></div>
+<div class="tool"><div class="ic">🔗</div><h3>Link Inspector</h3><p>Find broken links and toxic backlinks before they hurt rankings.</p></div>
+<div class="tool"><div class="ic">🤖</div><h3>AI Content Brief</h3><p>AI-generated outlines that target the exact gaps in page-1 results.</p></div>
+</div></section>
+<section class="cta"><h2>Your competitors audit weekly. Do you?</h2><p>Free plan: 3 audits/month. No card required.</p><button class="btn dark">Create Free Account →</button></section>
+<footer>© 2026 RankForge Labs (Demo) · Built for developers & marketers</footer>
+<a class="as01" href="/">⚡ Built by Project AS01</a>
+</body></html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MailMint — Marketing Automation on Autopilot</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Figtree,sans-serif;background:#fbfaff;color:#221a3a}
+nav{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:14px 5%;background:rgba(251,250,255,.93);backdrop-filter:blur(10px);border-bottom:1px solid #ece8f8}
+.logo{font-weight:800;font-size:22px}.logo span{color:#7c3aed}
+nav ul{display:flex;gap:24px;list-style:none}nav a{color:#6b5f8e;text-decoration:none;font-size:14px;font-weight:600}
+.btn{background:#7c3aed;color:#fff;border:none;padding:11px 24px;border-radius:10px;font-weight:800;font-size:14px;cursor:pointer;font-family:Figtree}
+.btn.lt{background:#f1ebff;color:#7c3aed}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;padding:54px 5%}
+.hero h1{font-size:46px;font-weight:800;line-height:1.08}
+.hero h1 span{color:#7c3aed}
+.hero p{color:#6b5f8e;margin:16px 0 24px;font-size:16.5px}
+/* automation flow */
+.flow{background:#fff;border:1px solid #ece8f8;border-radius:18px;padding:24px;box-shadow:0 16px 50px rgba(124,58,237,.12)}
+.flow h3{font-size:14px;color:#6b5f8e;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
+.node{display:flex;align-items:center;gap:12px;background:#faf8ff;border:1.5px solid #e4dcf7;border-radius:12px;padding:13px 16px;font-size:14px;font-weight:600}
+.node .ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.node small{display:block;color:#8a7fad;font-size:11.5px;font-weight:400}
+.arrow{text-align:center;color:#b7a8e0;font-size:18px;padding:4px 0}
+.node.live{border-color:#7c3aed;box-shadow:0 0 0 3px #f1ebff}
+section{padding:54px 5%}
+.sec-h{text-align:center;margin-bottom:36px}.sec-h h2{font-size:32px;font-weight:800}.sec-h p{color:#6b5f8e;margin-top:8px}
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.feat{background:#fff;border:1px solid #ece8f8;border-radius:16px;padding:24px;transition:transform .25s,box-shadow .25s}
+.feat:hover{transform:translateY(-5px);box-shadow:0 14px 40px rgba(124,58,237,.14)}
+.feat .ic{width:44px;height:44px;background:#f1ebff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:21px;margin-bottom:12px}
+.feat h3{font-size:16px;font-weight:800}.feat p{color:#6b5f8e;font-size:13.5px;margin-top:6px;line-height:1.6}
+.strip{display:flex;justify-content:center;gap:64px;background:#221a3a;color:#fff;padding:42px 5%;flex-wrap:wrap;text-align:center}
+.strip b{display:block;font-size:28px;color:#c4b5fd}
+.strip small{color:#9d92c2;font-size:12px}
+.cta{text-align:center;padding:60px 5%;background:linear-gradient(110deg,#f1ebff,#fdf0ff)}
+.cta h2{font-size:32px;font-weight:800;margin-bottom:10px}.cta p{color:#6b5f8e;margin-bottom:24px}
+footer{background:#1a1430;color:#9d92c2;text-align:center;padding:26px;font-size:13px}
+.as01{position:fixed;bottom:14px;left:14px;z-index:99;background:#0a0420;color:#c4b5fd;font-size:11px;font-weight:600;padding:8px 14px;border-radius:99px;text-decoration:none;border:1px solid #7c3aed;box-shadow:0 0 14px rgba(124,58,237,.5)}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.hero h1{font-size:30px}nav ul{display:none}.strip{gap:28px}}
+</style>
+</head>
+<body>
+<nav><div class="logo">Mail<span>Mint</span></div><ul><li><a href="#s2">Features</a></li><li><a href="#">Automations</a></li><li><a href="#">Pricing</a></li><li><a href="#">Templates</a></li></ul><button class="btn">Start Free</button></nav>
+<header class="hero">
+<div><h1>Marketing That Runs <span>While You Sleep</span></h1>
+<p>Email, WhatsApp and SMS campaigns on autopilot — welcome new customers, recover abandoned carts and win back old buyers without lifting a finger.</p>
+<button class="btn">Build Your First Automation →</button> <button class="btn lt">Watch 2-min Demo</button>
+</div>
+<div class="flow">
+<h3>⚙️ Abandoned Cart Recovery — LIVE</h3>
+<div class="node"><span class="ic" style="background:#ffe9ec">🛒</span><div>Customer abandons cart<small>Trigger · avg 38/day</small></div></div>
+<div class="arrow">↓</div>
+<div class="node"><span class="ic" style="background:#e8f6ee">⏰</span><div>Wait 1 hour<small>Delay</small></div></div>
+<div class="arrow">↓</div>
+<div class="node live"><span class="ic" style="background:#f1ebff">💬</span><div>WhatsApp: "You forgot something! 10% off inside"<small>Sending now · 64% open rate</small></div></div>
+<div class="arrow">↓</div>
+<div class="node"><span class="ic" style="background:#fff7e0">💰</span><div>₹1,24,300 recovered this month<small>Result</small></div></div>
+</div>
+</header>
+<div class="strip"><div><b>₹14Cr+</b><small>Revenue recovered</small></div><div><b>2,400+</b><small>Businesses</small></div><div><b>64%</b><small>WhatsApp open rate</small></div><div><b>10 min</b><small>Setup time</small></div></div>
+<section id="s2"><div class="sec-h"><h2>Automations That Print Money</h2><p>Pre-built playbooks — switch on, watch results</p></div>
+<div class="feats">
+<div class="feat"><div class="ic">👋</div><h3>Welcome Series</h3><p>Turn new signups into first purchases with a 3-message warm-up.</p></div>
+<div class="feat"><div class="ic">🛒</div><h3>Cart Recovery</h3><p>Email + WhatsApp nudges recover up to 28% of abandoned carts.</p></div>
+<div class="feat"><div class="ic">🎂</div><h3>Birthday Offers</h3><p>Automatic personalized coupons on customer birthdays.</p></div>
+<div class="feat"><div class="ic">😴</div><h3>Win-Back Flows</h3><p>Re-activate customers who haven't bought in 60 days.</p></div>
+<div class="feat"><div class="ic">📊</div><h3>Revenue Analytics</h3><p>See exactly how much each automation earned, in rupees.</p></div>
+<div class="feat"><div class="ic">🤖</div><h3>AI Copywriter</h3><p>Subject lines and messages written by AI, tested automatically.</p></div>
+</div></section>
+<section class="cta"><h2>Your store should sell while you sleep 😴</h2><p>Free up to 500 contacts. Setup in 10 minutes.</p><button class="btn">Get MailMint Free →</button></section>
+<footer>© 2026 MailMint Automation (Demo) · Email · WhatsApp · SMS</footer>
+<a class="as01" href="/">⚡ Built by Project AS01</a>
+</body></html>
