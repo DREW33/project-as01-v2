@@ -177,29 +177,62 @@ export default function ChatWidget() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [msgs, typing, open]);
 
-  const send = (text: string) => {
+  const send = async (text: string) => {
     if (!text.trim()) return;
-    setMsgs((m) => [...m, { role: "user", text }]);
+    const history = [...msgs, { role: "user" as const, text }];
+    setMsgs(history);
     setInput("");
     setTyping(true);
-    const { text: reply, saveLead } = brain(text, ctxRef.current);
-    if (saveLead) {
+
+    // Phone numbers are captured instantly and deterministically — no AI needed
+    const phoneMatch = text.replace(/\s/g, "").match(phoneRe) || text.match(phoneRe);
+    if (phoneMatch) {
       fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: "Chat visitor",
-          phone: saveLead.phone,
+          phone: phoneMatch[0].trim(),
           message: text,
           intent: "Chat — requested callback",
           source: "chat-widget",
         }),
       }).catch(() => {});
+      setTimeout(() => {
+        setTyping(false);
+        setMsgs((m) => [
+          ...m,
+          {
+            role: "bot",
+            text: `Perfect! 📞 I've passed ${phoneMatch[0].trim()} to the team — our AI agent will call you within 60 seconds to understand your project. Keep your phone nearby!`,
+          },
+        ]);
+      }, 700);
+      return;
     }
-    setTimeout(() => {
-      setTyping(false);
-      setMsgs((m) => [...m, { role: "bot", text: reply }]);
-    }, 800 + Math.random() * 600);
+
+    // Real AI via /api/chat (OpenRouter); rule-based brain as silent fallback
+    try {
+      const r = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: history.map((m) => ({ role: m.role === "user" ? "user" : "assistant", content: m.text })),
+        }),
+      });
+      const d = await r.json();
+      if (d?.text) {
+        setTyping(false);
+        setMsgs((m) => [...m, { role: "bot", text: d.text }]);
+        return;
+      }
+    } catch {
+      /* fall through to rule brain */
+    }
+
+    const { text: reply } = brain(text, ctxRef.current);
+    setTyping(false);
+    setMsgs((m) => [...m, { role: "bot", text: reply }]);
   };
 
   return (
