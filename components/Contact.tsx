@@ -52,13 +52,13 @@ export default function Contact() {
           </h2>
         </motion.div>
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-5">
+        <div className="mt-14 grid gap-8 md:grid-cols-5">
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.7 }}
-            className="space-y-4 lg:col-span-2"
+            className="space-y-4 md:col-span-2"
           >
             {channels.map((c) => (
               <a
@@ -99,7 +99,7 @@ export default function Contact() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.7 }}
-            className="glass-strong rounded-3xl p-7 md:p-9 lg:col-span-3"
+            className="glass-strong rounded-3xl p-7 md:col-span-3 md:p-9"
           >
             {!sent ? (
               <form onSubmit={submit} className="grid grid-cols-1 gap-4 sm:grid-cols-2">

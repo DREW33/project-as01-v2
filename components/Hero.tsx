@@ -122,7 +122,7 @@ export default function Hero() {
         <LogoMark px={96} />
       </motion.div>
 
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-14 px-5 md:px-8 lg:grid-cols-2">
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-14 px-5 md:grid-cols-2 md:px-8">
         <div>
           <motion.div
             initial={{ opacity: 0, y: 24 }}

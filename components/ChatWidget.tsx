@@ -5,32 +5,158 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useLeadModal } from "./LeadModalContext";
 
 type Msg = { role: "bot" | "user"; text: string };
+type ChatCtx = { awaiting: "phone" | null; askedPhoneOnce: boolean; fallbacks: number };
 
 const quickReplies = ["💰 Pricing", "🗂️ Portfolio", "📅 Book a call", "🤖 AI automation"];
 
+const phoneRe = /(\+?\s?91[\s-]?)?([6-9]\d{4}[\s-]?\d{5})/;
+
 /*
- * Demo brain: keyword-routed answers. To go fully agentic, point this at
- * /api/chat backed by the Claude API (see app/api/chat/route.ts).
+ * Rule-based assistant brain with conversation context.
+ * To make it fully agentic, point this at an /api/chat route backed by the
+ * Claude API — the ctx object maps cleanly onto a system prompt + history.
  */
-function brain(input: string): string {
-  const q = input.toLowerCase();
-  if (/(price|pricing|cost|budget|charge|₹|quote)/.test(q))
-    return "Our plans start at ₹20,000+ (Starter), ₹50,000+ (Business — most popular) and Custom for Premium AI/enterprise builds. Every plan includes futuristic design and AI lead capture. Want me to open the quote form?";
-  if (/(portfolio|project|work|example|demo)/.test(q))
-    return "We've shipped 50+ products — e-commerce (NovaCommerce, +64% conversions), CRMs, prediction platforms, gaming systems for 140k concurrent players, and AI calling agents. Scroll to the Projects section or tap a card to open its live preview! 🚀";
-  if (/(call|book|schedule|meet|consult|talk)/.test(q))
-    return "Easy! Tap the button below and drop your number — our AI voice agent will call you within 60 seconds to understand your project and schedule a consultation with the team. ⚡";
-  if (/(ai|automation|chatbot|agent|voice)/.test(q))
-    return "AI is our home turf 🤖 We build chatbots, AI calling agents (like the one that will call you!), CRM automation and full business automation using Claude, OpenAI and ElevenLabs. What process do you want to automate?";
-  if (/(app|android|ios|mobile)/.test(q))
-    return "We build native-quality Android + iOS apps from one codebase — like MediBook, which moved 60% of a hospital chain's bookings to mobile in 3 months. Tell me about your app idea!";
-  if (/(website|web|ecommerce|store|shop)/.test(q))
-    return "Websites are where we flex hardest 💪 — blazing-fast, SEO-perfect, cyberpunk-beautiful and engineered to convert. Starter sites from ₹20,000, delivered in 7 days. What's your business?";
-  if (/(time|long|deliver|deadline|fast)/.test(q))
-    return "Starter websites ship in 7 days, business platforms in 2–4 weeks, full products in 8–12 weeks. We demo progress every single week so you're never in the dark. ⏱️";
-  if (/(hi|hello|hey|namaste)/.test(q))
-    return "Hey there! 👋 I'm AS01, the AI assistant for Project AS01. I can show you our portfolio, explain pricing, or get our AI agent to call you. What are you building?";
-  return "Great question! I can help with pricing, portfolio, AI automation, apps and websites — or connect you straight to the team. Want a free consultation call? Our AI agent responds in under 60 seconds. ⚡";
+function brain(input: string, ctx: ChatCtx): { text: string; saveLead?: { phone: string } } {
+  const q = input.toLowerCase().trim();
+  const phoneMatch = input.replace(/\s/g, "").match(phoneRe) || input.match(phoneRe);
+
+  // 1. If a phone number appears anywhere, capture the lead immediately
+  if (phoneMatch) {
+    ctx.awaiting = null;
+    return {
+      text: `Perfect! 📞 I've passed ${phoneMatch[0].trim()} to the team — our AI agent will call you within 60 seconds to understand your project. Keep your phone nearby!`,
+      saveLead: { phone: phoneMatch[0].trim() },
+    };
+  }
+
+  // 2. If we asked for a phone number and didn't get one
+  if (ctx.awaiting === "phone") {
+    ctx.awaiting = null;
+    return {
+      text: "No problem — whenever you're ready, just type your 10-digit number here and we'll call you. Meanwhile, ask me anything about pricing, projects or timelines! 😊",
+    };
+  }
+
+  const ask = (text: string) => {
+    ctx.awaiting = "phone";
+    return { text };
+  };
+
+  // 3. Intent matching, most specific first
+  if (/(book|schedule|call me|callback|call back|talk|consult|meeting|demo call|connect)/.test(q))
+    return ask(
+      "Let's do it! 🚀 Type your 10-digit mobile number and our AI agent will call you within 60 seconds to discuss your project and book a free consultation."
+    );
+
+  if (/(price|pricing|cost|charge|budget|rate|kitna|how much|₹|quote|package)/.test(q))
+    return {
+      text: "Here's our transparent pricing 💰\n\n• Starter — ₹20,000+: 5-page premium website, 7-day delivery\n• Business — ₹50,000+: custom web app, admin dashboard, AI chatbot (most popular)\n• Premium — custom quote: AI calling, mobile apps, enterprise systems\n\nEvery plan includes futuristic design + AI lead capture. Want an exact quote? Tell me what you're building, or drop your number for a callback!",
+    };
+
+  if (/(portfolio|project|work|example|demo|made|built|show me)/.test(q))
+    return {
+      text: "We've shipped 50+ products — scroll up to our Projects section and click any card for a LIVE interactive demo 🔥 Highlights:\n\n• ShopKart — e-commerce, 46% add-to-cart rate\n• ZoomRide — Rapido-style bike taxi app\n• Stratos ERP & PulseCRM — enterprise dashboards\n• BigWin Arena — gaming platform for 2.8L concurrent players\n\nWhich type of project are you planning?",
+    };
+
+  if (/(restaurant|cafe|hotel|food|dining)/.test(q))
+    return {
+      text: "We build delicious restaurant websites 🍽️ — menus, table reservations, WhatsApp confirmations. Check the Spice Route demo in our portfolio (online reservations now fill 65% of their seats). Want one for your restaurant? Starting ₹20,000, live in 7 days.",
+    };
+
+  if (/(real estate|property|realty|flat|apartment|villa)/.test(q))
+    return {
+      text: "Real estate is our sweet spot 🏠 — see the LuxeNest demo in our portfolio: property search, verified listings and site-visit booking (4x more qualified visits). Tell me about your agency and I'll suggest the right package!",
+    };
+
+  if (/(wedding|makeup|bridal|salon|event|planner)/.test(q))
+    return {
+      text: "Beautiful! 💍 We've built GlamBride (bridal makeup booking — 2x bookings) and Evermore Events (luxury wedding planner — 3x bigger inquiries). Both live demos are in our Projects section. Your business could look this premium too — want details?",
+    };
+
+  if (/(gaming|game|bet|prediction|casino|tournament|ludo|rummy)/.test(q))
+    return {
+      text: "We engineer gaming platforms that survive finals night 🎮 — BigWin Arena (in our portfolio) handles 2.8 lakh concurrent players with <100ms round latency: wallets, instant payouts, provably-fair RNG, anti-fraud. What kind of gaming product are you planning?",
+    };
+
+  if (/(taxi|bike|rapido|ola|uber|ride|delivery app|logistics)/.test(q))
+    return {
+      text: "Like ZoomRide in our portfolio? 🏍️ Rider app + captain app + ops dashboard with live geo-matching (<3s captain match) and upfront fares. On-demand apps are 8–12 week builds. Tell me your city and idea — I'll get the team to map it out!",
+    };
+
+  if (/(erp|crm|inventory|billing|accounting|gst|payroll|software|dashboard|saas)/.test(q))
+    return {
+      text: "Enterprise is where we flex 🏭 Check Stratos ERP and PulseCRM in our portfolio — real dashboards you can click through. We've cut a client's month-end closing from 6 days to 9 hours. What process is slowing your business down?",
+    };
+
+  if (/(ai|automation|chatbot|agent|voice|calling|whatsapp bot)/.test(q))
+    return {
+      text: "AI is our home turf 🤖 We build:\n\n• AI chatbots (like me!)\n• AI calling agents — they phone your leads in <60s, in Hindi/English/Assamese\n• CRM + WhatsApp automation\n• Full business automation with Claude & OpenAI\n\nClients see 3.2x more qualified meetings. What would you like to automate?",
+    };
+
+  if (/(app|android|ios|mobile|play store|application)/.test(q))
+    return {
+      text: "We ship native-quality Android + iOS apps from one codebase 📱 MediBook moved 60% of a hospital chain's bookings to mobile in 3 months; ZoomRide did 10 lakh rides in year one. App builds run 8–12 weeks with weekly demos. What's your app idea?",
+    };
+
+  if (/(website|web|site|ecommerce|e-commerce|store|shop|landing)/.test(q))
+    return {
+      text: "Websites are where we flex hardest 💪 — blazing-fast, SEO-perfect, cyberpunk-beautiful and engineered to convert. Starter sites from ₹20,000, live in 7 days, e-commerce from ₹50,000. What's your business about?",
+    };
+
+  if (/(time|long|deliver|deadline|fast|duration|kab|when)/.test(q))
+    return {
+      text: "Speed is a feature here ⏱️\n\n• Starter websites — 7 days\n• Business platforms — 2–4 weeks\n• Apps & AI systems — 8–12 weeks\n\nYou get a live demo of progress every single week, so you're never in the dark.",
+    };
+
+  if (/(where|location|address|assam|guwahati|office|based)/.test(q))
+    return {
+      text: "We're based in Guwahati, Assam 🌏 — and we work with clients worldwide, fully remote-friendly. Local clients can meet us in person; everyone else gets weekly video demos. Where are you located?",
+    };
+
+  if (/(pay|payment|advance|upi|emi|refund|installment)/.test(q))
+    return {
+      text: "Simple & safe 💳 — typically 40% advance to start, 30% at design approval, 30% at launch. UPI, bank transfer or card. Milestone-based, so you only pay as you see progress. Need a custom split? We're flexible.",
+    };
+
+  if (/(support|maintain|maintenance|update|seo|rank|google)/.test(q))
+    return {
+      text: "Every project includes free support (1–3 months by plan) 🛠️ After that, maintenance plans start ₹2,000/month — updates, backups, security and SEO monitoring. Speaking of SEO: 100/100 Lighthouse scores are standard on our builds.",
+    };
+
+  if (/(hire|job|career|intern|vacancy|join)/.test(q))
+    return {
+      text: "Love the energy! We're a lean team but always happy to meet talented devs and designers from Assam. Send your portfolio through the contact form and we'll keep you on the radar 🤝",
+    };
+
+  if (/(thank|thanks|great|awesome|nice|cool|ok|okay)/.test(q))
+    return {
+      text: "Anytime! 😊 If you want to take the next step, I can have our AI agent call you — just type your number. Or keep exploring the live demos in our Projects section!",
+    };
+
+  if (/(bye|goodbye|see you|later)/.test(q))
+    return {
+      text: "See you soon! 👋 Project AS01 is always one click away. Coffee > Code > Repeat ☕",
+    };
+
+  if (/(who are you|what are you|human|robot|real person|your name)/.test(q))
+    return {
+      text: "I'm AS01 🤖 — the AI assistant for Project AS01, built by the same team that can build one for YOUR business. I answer instantly, never sleep, and capture leads while the humans drink coffee. Want one like me on your website?",
+    };
+
+  if (/(hi|hello|hey|namaste|namaskar|yo)/.test(q))
+    return {
+      text: "Hey there! 👋 I'm AS01, your AI assistant. I can show you our portfolio, explain pricing, or get our AI agent to call you in 60 seconds. What are you building?",
+    };
+
+  // 4. Rotating fallbacks that qualify the lead
+  const fallbacks = [
+    "Interesting! Tell me a bit more — is this about a website, mobile app, AI automation, or custom software? I'll point you to the right examples and pricing 🎯",
+    "I want to get this right for you 🤔 Could you share what kind of business you run and what you're trying to build? Or type your number and our team will call to discuss it properly.",
+    "Good question — that's one for our human experts! Type your 10-digit number and our AI agent will call you in 60 seconds, or use the Get Free Consultation button. Meanwhile: pricing, portfolio and timelines — I know those cold 😎",
+  ];
+  const text = fallbacks[ctx.fallbacks % fallbacks.length];
+  ctx.fallbacks += 1;
+  return { text };
 }
 
 export default function ChatWidget() {
@@ -38,12 +164,13 @@ export default function ChatWidget() {
   const [msgs, setMsgs] = useState<Msg[]>([
     {
       role: "bot",
-      text: "👋 Welcome to Project AS01! I'm your AI assistant. Ask me about pricing, projects, or AI automation — or I can have our AI agent call you in 60 seconds.",
+      text: "👋 Welcome to Project AS01! I'm your AI assistant. Ask me about pricing, projects, or AI automation — or type your phone number anytime and our AI agent will call you in 60 seconds.",
     },
   ]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const ctxRef = useRef<ChatCtx>({ awaiting: null, askedPhoneOnce: false, fallbacks: 0 });
   const { openModal } = useLeadModal();
 
   useEffect(() => {
@@ -55,10 +182,24 @@ export default function ChatWidget() {
     setMsgs((m) => [...m, { role: "user", text }]);
     setInput("");
     setTyping(true);
+    const { text: reply, saveLead } = brain(text, ctxRef.current);
+    if (saveLead) {
+      fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "Chat visitor",
+          phone: saveLead.phone,
+          message: text,
+          intent: "Chat — requested callback",
+          source: "chat-widget",
+        }),
+      }).catch(() => {});
+    }
     setTimeout(() => {
       setTyping(false);
-      setMsgs((m) => [...m, { role: "bot", text: brain(text) }]);
-    }, 900 + Math.random() * 600);
+      setMsgs((m) => [...m, { role: "bot", text: reply }]);
+    }, 800 + Math.random() * 600);
   };
 
   return (
@@ -72,7 +213,7 @@ export default function ChatWidget() {
         transition={{ delay: 1.2, type: "spring" }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.92 }}
-        className="btn-neon fixed bottom-5 right-5 z-[70] flex h-14 w-14 items-center justify-center rounded-full text-2xl text-white md:bottom-7 md:right-7"
+        className="btn-neon fixed overflow-visible bottom-5 right-5 z-[70] flex h-14 w-14 items-center justify-center rounded-full text-2xl text-white md:bottom-7 md:right-7"
       >
         {open ? "✕" : "🤖"}
         {!open && (
@@ -114,7 +255,7 @@ export default function ChatWidget() {
                   className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+                    className={`max-w-[85%] whitespace-pre-line rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
                       m.role === "user"
                         ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white"
                         : "glass text-slate-200"

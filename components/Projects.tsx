@@ -231,7 +231,7 @@ export default function Projects() {
           ))}
         </div>
 
-        <motion.div layout className="mt-12 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.div layout className="mt-12 grid gap-7 sm:grid-cols-2 md:grid-cols-3">
           <AnimatePresence mode="popLayout">
             {shown.map((p, i) => (
               <motion.article

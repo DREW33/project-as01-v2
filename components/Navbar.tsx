@@ -40,7 +40,7 @@ export default function Navbar() {
           <Logo />
         </Link>
 
-        <ul className="hidden items-center gap-8 lg:flex">
+        <ul className="hidden items-center gap-8 md:flex">
           {links.map((l) => (
             <li key={l.href}>
               <a
@@ -61,7 +61,7 @@ export default function Navbar() {
             Free Consultation
           </button>
           <button
-            className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-full border border-white/15 lg:hidden"
+            className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-full border border-white/15 md:hidden"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Toggle menu"
           >
@@ -75,7 +75,7 @@ export default function Navbar() {
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
-          className="glass-strong lg:hidden"
+          className="glass-strong md:hidden"
         >
           <ul className="space-y-1 px-5 py-4">
             {links.map((l) => (

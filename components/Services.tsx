@@ -24,7 +24,7 @@ export default function Services() {
           </h2>
         </motion.div>
 
-        <div className="mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid gap-7 sm:grid-cols-2 md:grid-cols-3">
           {services.map((s, i) => (
             <motion.div
               key={s.title}

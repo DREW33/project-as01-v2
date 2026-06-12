@@ -26,7 +26,7 @@ export default function Pricing() {
           </p>
         </motion.div>
 
-        <div className="mt-14 grid gap-7 lg:grid-cols-3">
+        <div className="mt-14 grid gap-7 md:grid-cols-3">
           {pricing.map((plan, i) => (
             <motion.div
               key={plan.name}
@@ -36,7 +36,7 @@ export default function Pricing() {
               transition={{ duration: 0.6, delay: i * 0.14 }}
               className={`relative rounded-3xl p-8 ${
                 plan.featured
-                  ? "neon-border z-10 shadow-[0_0_60px_rgba(147,51,234,0.3)] lg:-my-4 lg:py-12"
+                  ? "neon-border z-10 shadow-[0_0_60px_rgba(147,51,234,0.3)] md:-my-4 md:py-12"
                   : "glass glow-card"
               }`}
             >
