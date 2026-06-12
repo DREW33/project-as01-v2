@@ -166,9 +166,21 @@ export default function LeadModal() {
                     </motion.div>
                   ))}
                 </div>
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 4 }}
+                  onClick={() => {
+                    close();
+                    window.dispatchEvent(new CustomEvent("as01:voice"));
+                  }}
+                  className="btn-neon font-display mt-6 w-full rounded-xl px-6 py-3.5 text-sm font-bold uppercase tracking-wider text-white"
+                >
+                  📞 Answer the AI call now
+                </motion.button>
                 <button
                   onClick={close}
-                  className="btn-ghost font-display mt-6 w-full rounded-xl px-6 py-3 text-sm font-semibold uppercase tracking-wider text-white"
+                  className="btn-ghost font-display mt-3 w-full rounded-xl px-6 py-3 text-sm font-semibold uppercase tracking-wider text-white"
                 >
                   Done
                 </button>

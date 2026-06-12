@@ -277,6 +277,17 @@ export default function ChatWidget() {
                   Online · replies instantly
                 </p>
               </div>
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  window.dispatchEvent(new CustomEvent("as01:voice"));
+                }}
+                aria-label="Start voice call"
+                title="Talk to the AI by voice"
+                className="ml-auto flex h-10 w-10 items-center justify-center rounded-full border border-green-500/40 bg-green-500/10 text-lg transition hover:scale-110 hover:bg-green-500/25"
+              >
+                📞
+              </button>
             </div>
 
             <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
