@@ -39,7 +39,32 @@ export default function AdminPage() {
   const [error, setError] = useState(false);
   const [checking, setChecking] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
-  const [tab, setTab] = useState<"leads" | "calls" | "analytics">("leads");
+  const [tab, setTab] = useState<"leads" | "calls" | "analytics" | "studio">("leads");
+  const [studioTopic, setStudioTopic] = useState("");
+  const [studioResult, setStudioResult] = useState("");
+  const [studioLoading, setStudioLoading] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  const generate = async (type: "ideas" | "caption" | "calendar") => {
+    if (!studioTopic.trim() || studioLoading) return;
+    setStudioLoading(type);
+    setStudioResult("");
+    try {
+      const r = await fetch("/api/social", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-key": sessionStorage.getItem("as01_admin_key") ?? "",
+        },
+        body: JSON.stringify({ type, topic: studioTopic }),
+      });
+      const d = await r.json();
+      setStudioResult(d.text || d.error || "Something went wrong — try again.");
+    } catch {
+      setStudioResult("Network error — try again.");
+    }
+    setStudioLoading(null);
+  };
 
   useEffect(() => {
     if (sessionStorage.getItem("as01_admin_key")) setAuthed(true);
@@ -176,6 +201,7 @@ export default function AdminPage() {
               ["leads", "🎯 Leads & CRM"],
               ["calls", "🤖 AI Call Logs"],
               ["analytics", "📊 Analytics"],
+              ["studio", "✨ AI Studio"],
             ] as const
           ).map(([id, label]) => (
             <button
@@ -286,6 +312,83 @@ export default function AdminPage() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        )}
+
+        {tab === "studio" && (
+          <div className="mt-6 grid gap-6 lg:grid-cols-2">
+            <div className="glass rounded-2xl p-6">
+              <h3 className="font-display text-sm font-bold uppercase tracking-wider text-white">
+                ✨ Instagram Content Generator
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                Powered by your AI API. Describe a goal or topic, generate, then copy-paste
+                straight into Instagram. Posting manually keeps your account 100% safe.
+              </p>
+              <textarea
+                rows={4}
+                value={studioTopic}
+                onChange={(e) => setStudioTopic(e.target.value)}
+                placeholder="e.g. promote our ₹20,000 website offer to restaurant owners in Guwahati"
+                className={`${inputCls} mt-4`}
+              />
+              <div className="mt-4 flex flex-wrap gap-2.5">
+                {(
+                  [
+                    ["ideas", "💡 8 Post Ideas"],
+                    ["caption", "✍️ Captions + Hashtags"],
+                    ["calendar", "🗓️ 7-Day Calendar"],
+                  ] as const
+                ).map(([t, label]) => (
+                  <button
+                    key={t}
+                    onClick={() => generate(t)}
+                    disabled={!!studioLoading || !studioTopic.trim()}
+                    className="btn-neon font-display rounded-xl px-4 py-2.5 text-[11px] font-bold uppercase tracking-wider text-white disabled:opacity-50"
+                  >
+                    {studioLoading === t ? "Generating…" : label}
+                  </button>
+                ))}
+              </div>
+              <p className="mt-4 text-[11px] leading-relaxed text-slate-600">
+                Growth tip: post 4-5x a week, reply to every comment within an hour, and put
+                your WhatsApp link in bio. Never use auto-DM bots — Instagram bans for it.
+              </p>
+            </div>
+            <div className="glass relative rounded-2xl p-6">
+              <div className="flex items-center justify-between">
+                <h3 className="font-display text-sm font-bold uppercase tracking-wider text-white">
+                  Result
+                </h3>
+                {studioResult && (
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(studioResult).then(() => {
+                        setCopied(true);
+                        setTimeout(() => setCopied(false), 1500);
+                      });
+                    }}
+                    className="btn-ghost rounded-lg px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-white"
+                  >
+                    {copied ? "✓ Copied" : "📋 Copy"}
+                  </button>
+                )}
+              </div>
+              <div className="mt-4 max-h-[420px] overflow-y-auto whitespace-pre-line text-sm leading-relaxed text-slate-300">
+                {studioLoading ? (
+                  <span className="animate-pulse text-purple-300">
+                    AI is writing your content…
+                  </span>
+                ) : (
+                  studioResult || (
+                    <span className="text-slate-600">
+                      Generated content appears here. Type a topic on the left and pick a
+                      format.
+                    </span>
+                  )
+                )}
+              </div>
+            </div>
           </div>
         )}
 
