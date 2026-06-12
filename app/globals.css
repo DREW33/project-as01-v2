@@ -91,10 +91,16 @@ body {
 }
 
 .gradient-text {
-  background: linear-gradient(92deg, #c084fc 0%, #a855f7 30%, #60a5fa 70%, #38bdf8 100%);
+  background: linear-gradient(92deg, #c084fc 0%, #a855f7 25%, #60a5fa 50%, #38bdf8 75%, #c084fc 100%);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  animation: gradient-shift 6s linear infinite;
+}
+
+@keyframes gradient-shift {
+  to { background-position: 200% center; }
 }
 
 .glass {
@@ -120,17 +126,34 @@ body {
 }
 
 .btn-neon {
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(92deg, #9333ea, #3b82f6);
   box-shadow:
     0 0 18px rgba(147, 51, 234, 0.45),
     0 0 38px rgba(59, 130, 246, 0.25);
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
+.btn-neon::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.55s ease;
+  pointer-events: none;
+}
 .btn-neon:hover {
   box-shadow:
     0 0 28px rgba(147, 51, 234, 0.75),
     0 0 60px rgba(59, 130, 246, 0.45);
   transform: translateY(-2px);
+}
+.btn-neon:hover::after {
+  left: 130%;
 }
 
 .btn-ghost {

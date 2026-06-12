@@ -1,6 +1,9 @@
 import { LeadModalProvider } from "@/components/LeadModalContext";
 import Particles from "@/components/Particles";
 import CursorGlow from "@/components/CursorGlow";
+import ScrollProgress from "@/components/ScrollProgress";
+import LoadingScreen from "@/components/LoadingScreen";
+import TechMarquee from "@/components/TechMarquee";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
@@ -17,11 +20,14 @@ import ChatWidget from "@/components/ChatWidget";
 export default function Home() {
   return (
     <LeadModalProvider>
+      <LoadingScreen />
+      <ScrollProgress />
       <Particles />
       <CursorGlow />
       <Navbar />
       <main className="relative z-10">
         <Hero />
+        <TechMarquee />
         <Projects />
         <Services />
         <Journey />

@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 import { createClient } from "@supabase/supabase-js";
+import { get, put } from "@vercel/blob";
 
 /*
- * Lead store.
- *  - Production: Supabase (set SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY env vars).
- *    Table: leads(id text pk, received_at timestamptz default now(), data jsonb)
- *  - Local dev fallback: data/leads.json file.
+ * Lead store, picked by available credentials:
+ *  1. Supabase  — SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY
+ *  2. Vercel Blob — BLOB_READ_WRITE_TOKEN (production default; auto-provisioned)
+ *  3. Local JSON file — dev fallback
  *
  * GET requires the x-admin-key header (admin dashboard only) — leads are
  * customer PII and must not be publicly readable.
@@ -18,9 +19,35 @@ const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabase =
   supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
+const hasBlob = !!process.env.BLOB_READ_WRITE_TOKEN;
+const BLOB_PATH = "leads.json";
+
 const dataFile = path.join(process.cwd(), "data", "leads.json");
 
 type Lead = Record<string, unknown> & { id: string; receivedAt: string };
+
+async function readBlobLeads(): Promise<Lead[]> {
+  try {
+    const res = (await get(BLOB_PATH, { access: "private" })) as unknown as {
+      statusCode: number;
+      stream: ReadableStream;
+    } | null;
+    if (!res || res.statusCode !== 200) return [];
+    const text = await new Response(res.stream).text();
+    return JSON.parse(text) as Lead[];
+  } catch {
+    return []; // blob doesn't exist yet
+  }
+}
+
+async function writeBlobLeads(leads: Lead[]) {
+  await put(BLOB_PATH, JSON.stringify(leads), {
+    access: "private",
+    allowOverwrite: true,
+    addRandomSuffix: false,
+    contentType: "application/json",
+  });
+}
 
 async function readFileLeads(): Promise<Lead[]> {
   try {
@@ -53,6 +80,10 @@ export async function GET(req: Request) {
     return NextResponse.json({ leads, store: "supabase" });
   }
 
+  if (hasBlob) {
+    return NextResponse.json({ leads: await readBlobLeads(), store: "blob" });
+  }
+
   return NextResponse.json({ leads: await readFileLeads(), store: "file" });
 }
 
@@ -81,6 +112,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
     }
     return NextResponse.json({ ok: true, lead, store: "supabase" });
+  }
+
+  if (hasBlob) {
+    const leads = await readBlobLeads();
+    leads.unshift(lead);
+    await writeBlobLeads(leads);
+    return NextResponse.json({ ok: true, lead, store: "blob" });
   }
 
   // local file fallback (dev only — ephemeral on serverless hosts)

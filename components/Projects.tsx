@@ -242,9 +242,22 @@ export default function Projects() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.55, delay: (i % 3) * 0.1 }}
-                className="glass glow-card group cursor-pointer overflow-hidden rounded-2xl"
+                className="group cursor-pointer [perspective:900px]"
                 onClick={() => setActive(p)}
               >
+                <div
+                  className="glass glow-card overflow-hidden rounded-2xl transition-transform duration-150 ease-out will-change-transform"
+                  onMouseMove={(e) => {
+                    const el = e.currentTarget;
+                    const r = el.getBoundingClientRect();
+                    const x = (e.clientX - r.left) / r.width - 0.5;
+                    const y = (e.clientY - r.top) / r.height - 0.5;
+                    el.style.transform = `rotateY(${(x * 6).toFixed(2)}deg) rotateX(${(-y * 6).toFixed(2)}deg) translateY(-6px) scale(1.01)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "";
+                  }}
+                >
                 <div className="relative overflow-hidden p-3 pb-0">
                   <div className="transition-transform duration-500 group-hover:scale-[1.04]">
                     <LiveThumb p={p} />
@@ -275,6 +288,7 @@ export default function Projects() {
                       </span>
                     )}
                   </div>
+                </div>
                 </div>
               </motion.article>
             ))}

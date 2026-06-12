@@ -1,9 +1,44 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
 import { useLeadModal } from "./LeadModalContext";
 import { LogoMark } from "./Logo";
+
+/* Counts numeric stats up from 0 when scrolled into view */
+function CountUp({ value }: { value: string }) {
+  const m = value.match(/^([^0-9]*)([\d.]+)(.*)$/);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
+  const [display, setDisplay] = useState("0");
+
+  useEffect(() => {
+    if (!inView || !m) return;
+    const target = parseFloat(m[2]);
+    const decimals = m[2].includes(".") ? 1 : 0;
+    const start = performance.now();
+    const dur = 1500;
+    let raf = 0;
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setDisplay((target * eased).toFixed(decimals));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView]);
+
+  if (!m) return <span>{value}</span>;
+  return (
+    <span ref={ref}>
+      {m[1]}
+      {display}
+      {m[3]}
+    </span>
+  );
+}
 
 const codeLines = [
   "const client = await as01.consult({ free: true });",
@@ -128,13 +163,13 @@ export default function Hero() {
           >
             <a
               href="#projects"
-              className="btn-neon font-display rounded-full px-8 py-4 text-sm font-bold uppercase tracking-wider text-white"
+              className="btn-neon font-display w-full rounded-full px-8 py-4 text-center text-sm font-bold uppercase tracking-wider text-white sm:w-auto"
             >
               View Projects
             </a>
             <button
               onClick={() => openModal("Get Free Consultation")}
-              className="btn-ghost font-display rounded-full px-8 py-4 text-sm font-bold uppercase tracking-wider text-white"
+              className="btn-ghost font-display w-full rounded-full px-8 py-4 text-center text-sm font-bold uppercase tracking-wider text-white sm:w-auto"
             >
               Get Free Consultation
             </button>
@@ -152,7 +187,9 @@ export default function Hero() {
               ["<60s", "AI lead response"],
             ].map(([v, l]) => (
               <div key={l}>
-                <p className="font-display gradient-text text-2xl font-bold">{v}</p>
+                <p className="font-display gradient-text text-2xl font-bold">
+                  <CountUp value={v} />
+                </p>
                 <p className="mt-1 text-xs uppercase tracking-wider text-slate-500">{l}</p>
               </div>
             ))}
