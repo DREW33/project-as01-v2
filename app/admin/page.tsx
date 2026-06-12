@@ -44,6 +44,25 @@ export default function AdminPage() {
   const [studioResult, setStudioResult] = useState("");
   const [studioLoading, setStudioLoading] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [daily, setDaily] = useState<{ date: string; text: string } | null>(null);
+  const [dailyLoading, setDailyLoading] = useState(false);
+  const [dailyCopied, setDailyCopied] = useState(false);
+
+  const fetchDaily = async (force = false) => {
+    if (dailyLoading) return;
+    setDailyLoading(true);
+    try {
+      const r = await fetch(`/api/daily-posts${force ? "?force=1" : ""}`, {
+        headers: { "x-admin-key": sessionStorage.getItem("as01_admin_key") ?? "" },
+      });
+      const d = await r.json();
+      if (d.text) setDaily({ date: d.date, text: d.text });
+      else setDaily({ date: "", text: d.error || "Generation failed — try again." });
+    } catch {
+      setDaily({ date: "", text: "Network error — try again." });
+    }
+    setDailyLoading(false);
+  };
 
   const generate = async (type: "ideas" | "caption" | "calendar") => {
     if (!studioTopic.trim() || studioLoading) return;
@@ -316,6 +335,61 @@ export default function AdminPage() {
         )}
 
         {tab === "studio" && (
+          <>
+          <div className="glass mt-6 rounded-2xl p-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h3 className="font-display text-sm font-bold uppercase tracking-wider text-white">
+                  🔥 Today&apos;s Auto-Posts <span className="gradient-text">· 3 viral posts daily</span>
+                </h3>
+                <p className="mt-1 text-xs text-slate-500">
+                  Auto-generated every morning at 8:30 AM IST from today&apos;s real tech
+                  trends (Hacker News + Dev.to) — AI news, business AI tips &amp; dev insights.
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => fetchDaily(false)}
+                  disabled={dailyLoading}
+                  className="btn-neon font-display rounded-xl px-4 py-2.5 text-[11px] font-bold uppercase tracking-wider text-white disabled:opacity-50"
+                >
+                  {dailyLoading ? "Loading…" : "📬 Get Today's Posts"}
+                </button>
+                {daily?.text && (
+                  <>
+                    <button
+                      onClick={() => fetchDaily(true)}
+                      disabled={dailyLoading}
+                      className="btn-ghost rounded-xl px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-white disabled:opacity-50"
+                    >
+                      🔄 Regenerate
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(daily.text).then(() => {
+                          setDailyCopied(true);
+                          setTimeout(() => setDailyCopied(false), 1500);
+                        });
+                      }}
+                      className="btn-ghost rounded-xl px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-white"
+                    >
+                      {dailyCopied ? "✓ Copied" : "📋 Copy All"}
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+            {daily?.text && (
+              <div className="mt-4 max-h-[420px] overflow-y-auto whitespace-pre-line rounded-xl bg-white/[0.03] p-4 text-sm leading-relaxed text-slate-300">
+                {daily.date && (
+                  <p className="mb-2 text-[11px] uppercase tracking-wider text-purple-400">
+                    Generated for {daily.date}
+                  </p>
+                )}
+                {daily.text}
+              </div>
+            )}
+          </div>
           <div className="mt-6 grid gap-6 lg:grid-cols-2">
             <div className="glass rounded-2xl p-6">
               <h3 className="font-display text-sm font-bold uppercase tracking-wider text-white">
@@ -390,6 +464,7 @@ export default function AdminPage() {
               </div>
             </div>
           </div>
+          </>
         )}
 
         {tab === "analytics" && (
