@@ -41,6 +41,8 @@ export default function PostMaker() {
   const [photoPrompt, setPhotoPrompt] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
   const [photoLoading, setPhotoLoading] = useState(false);
+  const [photoError, setPhotoError] = useState("");
+  const [photoTries, setPhotoTries] = useState(0);
 
   const drawCard = () => {
     const canvas = canvasRef.current;
@@ -134,15 +136,35 @@ export default function PostMaker() {
     }, "image/png");
   };
 
-  const generatePhoto = () => {
-    if (!photoPrompt.trim()) return;
-    setPhotoLoading(true);
+  const buildPhotoUrl = (seed: number) => {
     const prompt = encodeURIComponent(
       `${photoPrompt}, professional photography, instagram post, high quality, vibrant`
     );
-    setPhotoUrl(
-      `https://image.pollinations.ai/prompt/${prompt}?width=1080&height=1080&nologo=true&seed=${Date.now() % 100000}`
-    );
+    // NOTE: no "nologo" param — that became a paid flag and caused 402 errors.
+    return `https://image.pollinations.ai/prompt/${prompt}?width=1024&height=1024&seed=${seed}`;
+  };
+
+  const generatePhoto = () => {
+    if (!photoPrompt.trim()) return;
+    setPhotoError("");
+    setPhotoLoading(true);
+    setPhotoTries(1);
+    setPhotoUrl(buildPhotoUrl(Date.now() % 100000));
+  };
+
+  const onPhotoError = () => {
+    // free service is rate-limited/busy — retry a couple of times with a new seed
+    if (photoTries < 3) {
+      const next = photoTries + 1;
+      setPhotoTries(next);
+      setTimeout(() => setPhotoUrl(buildPhotoUrl((Date.now() + next * 7) % 100000)), 1500);
+    } else {
+      setPhotoLoading(false);
+      setPhotoUrl("");
+      setPhotoError(
+        "The free AI image service is busy right now (it limits requests). Wait a minute and try again — or use the Branded Card Maker on the left, which always works instantly."
+      );
+    }
   };
 
   const downloadPhoto = async () => {
@@ -231,8 +253,9 @@ export default function PostMaker() {
           📸 AI Photo Generator
         </h3>
         <p className="mt-1 text-xs text-slate-500">
-          Describe any image — generated free by AI (Pollinations). Great for post
-          backgrounds and visuals suggested in your daily posts.
+          Describe any image — generated free by AI. The free service is rate-limited, so
+          it may take a few tries. For guaranteed instant results, use the Branded Card
+          Maker on the left.
         </p>
         <textarea
           rows={3}
@@ -244,10 +267,10 @@ export default function PostMaker() {
         <div className="mt-4 flex gap-2.5">
           <button
             onClick={generatePhoto}
-            disabled={!photoPrompt.trim()}
+            disabled={!photoPrompt.trim() || photoLoading}
             className="btn-neon font-display rounded-xl px-4 py-2.5 text-[11px] font-bold uppercase tracking-wider text-white disabled:opacity-50"
           >
-            {photoLoading && !photoUrl ? "Generating…" : "✨ Generate Photo"}
+            {photoLoading ? "Generating…" : "✨ Generate Photo"}
           </button>
           {photoUrl && !photoLoading && (
             <button
@@ -264,13 +287,19 @@ export default function PostMaker() {
             src={photoUrl}
             alt="AI generated"
             onLoad={() => setPhotoLoading(false)}
-            className="mt-4 w-full max-w-xs rounded-xl border border-white/10"
+            onError={onPhotoError}
+            className={`mt-4 w-full max-w-xs rounded-xl border border-white/10 ${
+              photoLoading ? "hidden" : ""
+            }`}
           />
         )}
-        {photoLoading && photoUrl && (
+        {photoLoading && (
           <p className="mt-3 animate-pulse text-xs text-purple-300">
-            AI is painting… takes ~15 seconds
+            AI is painting… (attempt {photoTries}/3, ~15s each)
           </p>
+        )}
+        {photoError && (
+          <p className="mt-3 text-xs leading-relaxed text-amber-400">{photoError}</p>
         )}
       </div>
     </div>
