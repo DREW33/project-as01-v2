@@ -42,7 +42,6 @@ export default function PostMaker() {
   const [photoUrl, setPhotoUrl] = useState("");
   const [photoLoading, setPhotoLoading] = useState(false);
   const [photoError, setPhotoError] = useState("");
-  const [photoTries, setPhotoTries] = useState(0);
 
   const drawCard = () => {
     const canvas = canvasRef.current;
@@ -136,35 +135,39 @@ export default function PostMaker() {
     }, "image/png");
   };
 
-  const buildPhotoUrl = (seed: number) => {
-    const prompt = encodeURIComponent(
-      `${photoPrompt}, professional photography, instagram post, high quality, vibrant`
-    );
-    // NOTE: no "nologo" param — that became a paid flag and caused 402 errors.
-    return `https://image.pollinations.ai/prompt/${prompt}?width=1024&height=1024&seed=${seed}`;
-  };
-
-  const generatePhoto = () => {
-    if (!photoPrompt.trim()) return;
+  const generatePhoto = async () => {
+    if (!photoPrompt.trim() || photoLoading) return;
     setPhotoError("");
+    setPhotoUrl("");
     setPhotoLoading(true);
-    setPhotoTries(1);
-    setPhotoUrl(buildPhotoUrl(Date.now() % 100000));
+    try {
+      const r = await fetch("/api/image", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-key": sessionStorage.getItem("as01_admin_key") ?? "",
+        },
+        body: JSON.stringify({ prompt: photoPrompt }),
+      });
+      const d = await r.json();
+      if (d.url) {
+        setPhotoUrl(d.url); // <img> onLoad/onError takes over from here
+      } else {
+        setPhotoLoading(false);
+        setPhotoError(d.error || "Could not generate image — try again.");
+      }
+    } catch {
+      setPhotoLoading(false);
+      setPhotoError("Network error — try again.");
+    }
   };
 
   const onPhotoError = () => {
-    // free service is rate-limited/busy — retry a couple of times with a new seed
-    if (photoTries < 3) {
-      const next = photoTries + 1;
-      setPhotoTries(next);
-      setTimeout(() => setPhotoUrl(buildPhotoUrl((Date.now() + next * 7) % 100000)), 1500);
-    } else {
-      setPhotoLoading(false);
-      setPhotoUrl("");
-      setPhotoError(
-        "The free AI image service is busy right now (it limits requests). Wait a minute and try again — or use the Branded Card Maker on the left, which always works instantly."
-      );
-    }
+    setPhotoLoading(false);
+    setPhotoUrl("");
+    setPhotoError(
+      "The free image service is busy right now. Wait a minute and try again — or use the Branded Card Maker on the left, which always works instantly."
+    );
   };
 
   const downloadPhoto = async () => {
@@ -295,7 +298,7 @@ export default function PostMaker() {
         )}
         {photoLoading && (
           <p className="mt-3 animate-pulse text-xs text-purple-300">
-            AI is painting… (attempt {photoTries}/3, ~15s each)
+            AI is painting your image… (~10-20 seconds)
           </p>
         )}
         {photoError && (
