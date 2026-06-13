@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Logo from "@/components/Logo";
+import PostMaker from "@/components/PostMaker";
 
 type Lead = {
   id: string;
@@ -39,7 +40,7 @@ export default function AdminPage() {
   const [error, setError] = useState(false);
   const [checking, setChecking] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
-  const [tab, setTab] = useState<"leads" | "calls" | "analytics" | "studio">("leads");
+  const [tab, setTab] = useState<"leads" | "calls" | "analytics" | "studio" | "analyzer">("leads");
   const [studioTopic, setStudioTopic] = useState("");
   const [studioResult, setStudioResult] = useState("");
   const [studioLoading, setStudioLoading] = useState<string | null>(null);
@@ -47,6 +48,49 @@ export default function AdminPage() {
   const [daily, setDaily] = useState<{ date: string; text: string } | null>(null);
   const [dailyLoading, setDailyLoading] = useState(false);
   const [dailyCopied, setDailyCopied] = useState(false);
+
+  // Client business analyzer
+  type Analysis = {
+    healthScore?: number;
+    problems?: string[];
+    revenueLoss?: string;
+    opportunities?: string[];
+    proposal?: string;
+    recommendedPackage?: string;
+    whatsappPitch?: string;
+    error?: string;
+  };
+  const [azForm, setAzForm] = useState({ business: "", website: "", industry: "", notes: "" });
+  const [azResult, setAzResult] = useState<Analysis | null>(null);
+  const [azLoading, setAzLoading] = useState(false);
+  const [azCopied, setAzCopied] = useState("");
+
+  const runAnalysis = async () => {
+    if (!azForm.business.trim() || azLoading) return;
+    setAzLoading(true);
+    setAzResult(null);
+    try {
+      const r = await fetch("/api/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-key": sessionStorage.getItem("as01_admin_key") ?? "",
+        },
+        body: JSON.stringify(azForm),
+      });
+      setAzResult(await r.json());
+    } catch {
+      setAzResult({ error: "Network error — try again." });
+    }
+    setAzLoading(false);
+  };
+
+  const copyText = (text: string, tag: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setAzCopied(tag);
+      setTimeout(() => setAzCopied(""), 1500);
+    });
+  };
 
   const fetchDaily = async (force = false) => {
     if (dailyLoading) return;
@@ -214,13 +258,14 @@ export default function AdminPage() {
         </div>
 
         {/* tabs */}
-        <div className="mt-8 flex gap-2">
+        <div className="mt-8 flex flex-wrap gap-2">
           {(
             [
               ["leads", "🎯 Leads & CRM"],
               ["calls", "🤖 AI Call Logs"],
               ["analytics", "📊 Analytics"],
               ["studio", "✨ AI Studio"],
+              ["analyzer", "🔍 Client Analyzer"],
             ] as const
           ).map(([id, label]) => (
             <button
@@ -464,7 +509,180 @@ export default function AdminPage() {
               </div>
             </div>
           </div>
+          <PostMaker />
           </>
+        )}
+
+        {tab === "analyzer" && (
+          <div className="mt-6 grid gap-6 lg:grid-cols-2">
+            <div className="glass h-fit rounded-2xl p-6">
+              <h3 className="font-display text-sm font-bold uppercase tracking-wider text-white">
+                🔍 Client Business Analyzer
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                Enter a prospect&apos;s details. AI scans their current website, finds the
+                problems, estimates the money they&apos;re losing, and writes a ready-to-send
+                proposal — your perfect sales weapon.
+              </p>
+              <input
+                className={`${inputCls} mt-4`}
+                placeholder="Business name *"
+                value={azForm.business}
+                onChange={(e) => setAzForm((f) => ({ ...f, business: e.target.value }))}
+              />
+              <input
+                className={`${inputCls} mt-3`}
+                placeholder="Their website (or leave blank if none)"
+                value={azForm.website}
+                onChange={(e) => setAzForm((f) => ({ ...f, website: e.target.value }))}
+              />
+              <input
+                className={`${inputCls} mt-3`}
+                placeholder="Industry (e.g. restaurant, salon, real estate)"
+                value={azForm.industry}
+                onChange={(e) => setAzForm((f) => ({ ...f, industry: e.target.value }))}
+              />
+              <textarea
+                rows={2}
+                className={`${inputCls} mt-3`}
+                placeholder="Anything you know about them (optional)"
+                value={azForm.notes}
+                onChange={(e) => setAzForm((f) => ({ ...f, notes: e.target.value }))}
+              />
+              <button
+                onClick={runAnalysis}
+                disabled={azLoading || !azForm.business.trim()}
+                className="btn-neon font-display mt-4 w-full rounded-xl px-6 py-3 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-50"
+              >
+                {azLoading ? "Analyzing their business…" : "🚀 Analyze & Build Proposal"}
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {!azResult && !azLoading && (
+                <div className="glass flex h-full min-h-[300px] items-center justify-center rounded-2xl p-6 text-center text-sm text-slate-600">
+                  The full analysis, revenue-loss estimate and ready-to-send proposal will
+                  appear here.
+                </div>
+              )}
+              {azLoading && (
+                <div className="glass flex h-full min-h-[300px] items-center justify-center rounded-2xl p-6">
+                  <span className="animate-pulse text-purple-300">
+                    Scanning their website &amp; building your pitch…
+                  </span>
+                </div>
+              )}
+              {azResult?.error && (
+                <div className="glass rounded-2xl p-6 text-sm text-red-400">{azResult.error}</div>
+              )}
+              {azResult && !azResult.error && (
+                <>
+                  <div className="glass rounded-2xl p-6">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs uppercase tracking-wider text-slate-500">
+                        Online Health Score
+                      </p>
+                      <p className="font-display gradient-text text-3xl font-extrabold">
+                        {azResult.healthScore ?? "—"}/100
+                      </p>
+                    </div>
+                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-red-500 via-yellow-400 to-green-400"
+                        style={{ width: `${azResult.healthScore ?? 0}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {azResult.revenueLoss && (
+                    <div className="glass rounded-2xl border border-red-500/20 p-6">
+                      <p className="text-xs font-bold uppercase tracking-wider text-red-400">
+                        💸 Estimated Revenue Lost
+                      </p>
+                      <p className="mt-2 text-sm leading-relaxed text-slate-200">
+                        {azResult.revenueLoss}
+                      </p>
+                    </div>
+                  )}
+
+                  {azResult.problems && (
+                    <div className="glass rounded-2xl p-6">
+                      <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                        ⚠️ Problems Found
+                      </p>
+                      <ul className="mt-3 space-y-2">
+                        {azResult.problems.map((p, i) => (
+                          <li key={i} className="flex gap-2 text-sm text-slate-300">
+                            <span className="text-red-400">✗</span>
+                            {p}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {azResult.opportunities && (
+                    <div className="glass rounded-2xl p-6">
+                      <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                        🚀 Growth Opportunities with Project AS01
+                      </p>
+                      <ul className="mt-3 space-y-2">
+                        {azResult.opportunities.map((o, i) => (
+                          <li key={i} className="flex gap-2 text-sm text-slate-300">
+                            <span className="text-green-400">✓</span>
+                            {o}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {azResult.proposal && (
+                    <div className="glass rounded-2xl p-6">
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs font-bold uppercase tracking-wider text-purple-400">
+                          📄 Ready-to-Send Proposal
+                          {azResult.recommendedPackage && (
+                            <span className="ml-2 rounded-full bg-purple-500/15 px-2 py-0.5 text-[10px] text-purple-300">
+                              {azResult.recommendedPackage}
+                            </span>
+                          )}
+                        </p>
+                        <button
+                          onClick={() => copyText(azResult.proposal!, "proposal")}
+                          className="btn-ghost rounded-lg px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-white"
+                        >
+                          {azCopied === "proposal" ? "✓ Copied" : "📋 Copy"}
+                        </button>
+                      </div>
+                      <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-slate-200">
+                        {azResult.proposal}
+                      </p>
+                    </div>
+                  )}
+
+                  {azResult.whatsappPitch && (
+                    <div className="glass rounded-2xl border border-green-500/20 p-6">
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs font-bold uppercase tracking-wider text-green-400">
+                          💬 WhatsApp Opener
+                        </p>
+                        <button
+                          onClick={() => copyText(azResult.whatsappPitch!, "wa")}
+                          className="btn-ghost rounded-lg px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-white"
+                        >
+                          {azCopied === "wa" ? "✓ Copied" : "📋 Copy"}
+                        </button>
+                      </div>
+                      <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-slate-200">
+                        {azResult.whatsappPitch}
+                      </p>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
         )}
 
         {tab === "analytics" && (
