@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
 type Result = {
@@ -101,11 +102,13 @@ export default function BusinessAudit() {
         </div>
       </section>
 
-      {/* modal */}
-      <AnimatePresence>
+      {/* modal — portaled to body so it sits above the fixed navbar */}
+      {typeof document !== "undefined" &&
+        createPortal(
+          <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 z-[90] flex items-center justify-center bg-black/75 p-3 backdrop-blur-md sm:p-6"
+            className="fixed inset-0 z-[120] flex items-center justify-center bg-black/80 p-3 backdrop-blur-md sm:p-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -127,8 +130,45 @@ export default function BusinessAudit() {
                 ✕
               </button>
 
+              {/* LOADING */}
+              {loading && (
+                <div className="flex flex-col items-center justify-center py-14 text-center">
+                  <div className="relative h-20 w-20">
+                    <span className="absolute inset-0 animate-ping rounded-full bg-purple-500/30" />
+                    <span className="logo-ring absolute inset-0 rounded-full" />
+                    <span className="absolute inset-[3px] flex items-center justify-center rounded-full bg-[#0a0420] font-mono text-lg font-bold">
+                      <span className="gradient-text">{"</>"}</span>
+                    </span>
+                  </div>
+                  <h3 className="font-display mt-6 text-xl font-bold text-white">
+                    Analyzing <span className="gradient-text">{form.business || "your business"}</span>
+                    <span className="animate-pulse">…</span>
+                  </h3>
+                  <p className="mt-2 max-w-xs text-sm text-slate-400">
+                    Our AI is scanning your online presence, checking your website and
+                    calculating your growth potential. This takes 15–30 seconds.
+                  </p>
+                  <div className="mt-6 w-full max-w-xs space-y-2 text-left">
+                    {["Scanning website…", "Checking SEO & speed…", "Estimating revenue impact…", "Building your report…"].map(
+                      (s, i) => (
+                        <motion.div
+                          key={s}
+                          initial={{ opacity: 0.3 }}
+                          animate={{ opacity: [0.3, 1, 0.3] }}
+                          transition={{ duration: 1.6, repeat: Infinity, delay: i * 0.4 }}
+                          className="flex items-center gap-2 text-xs text-slate-300"
+                        >
+                          <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-purple-400 to-blue-400" />
+                          {s}
+                        </motion.div>
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* FORM */}
-              {!result && (
+              {!result && !loading && (
                 <>
                   <p className="font-display text-xs uppercase tracking-[0.3em] text-purple-400">
                     Free Business Audit
@@ -162,7 +202,7 @@ export default function BusinessAudit() {
               )}
 
               {/* RESULT */}
-              {result && (
+              {result && !loading && (
                 <div>
                   {result.error ? (
                     <p className="py-10 text-center text-sm text-red-400">{result.error}</p>
@@ -265,7 +305,9 @@ export default function BusinessAudit() {
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+          </AnimatePresence>,
+          document.body
+        )}
     </>
   );
 }
