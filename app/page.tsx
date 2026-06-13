@@ -12,6 +12,7 @@ import Pricing from "@/components/Pricing";
 import Journey from "@/components/Journey";
 import Testimonials from "@/components/Testimonials";
 import LocalSeo from "@/components/LocalSeo";
+import BusinessAudit from "@/components/BusinessAudit";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import LeadModal from "@/components/LeadModal";
@@ -34,6 +35,7 @@ export default function Home() {
         <Journey />
         <Pricing />
         <Testimonials />
+        <BusinessAudit />
         <LocalSeo />
         <Contact />
       </main>

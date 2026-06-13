@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { get, put } from "@vercel/blob";
+import { isValidAdminKey } from "@/lib/adminAuth";
 
 /*
  * Daily viral-content engine.
@@ -128,9 +129,8 @@ Visual: [1-line idea for the image/video]
 }
 
 export async function GET(req: Request) {
-  const adminKey = process.env.ADMIN_PASSWORD ?? "as01admin";
   const cronSecret = process.env.CRON_SECRET;
-  const isAdmin = req.headers.get("x-admin-key") === adminKey;
+  const isAdmin = await isValidAdminKey(req.headers.get("x-admin-key"));
   const isCron =
     !!cronSecret && req.headers.get("authorization") === `Bearer ${cronSecret}`;
   if (!isAdmin && !isCron) {

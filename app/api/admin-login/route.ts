@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
+import { isValidAdminKey } from "@/lib/adminAuth";
 
 /*
- * Admin password lives in the ADMIN_PASSWORD env var (set in Vercel dashboard
- * or .env.local). Falls back to the dev default only when the var is unset.
+ * Login check. Accepts the env ADMIN_PASSWORD (master/recovery) OR any admin
+ * account stored in Blob (added from the dashboard). The client stores the raw
+ * password and sends it as x-admin-key on subsequent admin requests.
  */
 export async function POST(req: Request) {
   const { password } = await req.json().catch(() => ({ password: "" }));
-  const expected = process.env.ADMIN_PASSWORD ?? "as01admin";
-  if (typeof password === "string" && password.length > 0 && password === expected) {
+  if (typeof password === "string" && (await isValidAdminKey(password))) {
     return NextResponse.json({ ok: true });
   }
   return NextResponse.json({ ok: false }, { status: 401 });

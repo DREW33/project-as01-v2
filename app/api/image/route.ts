@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isValidAdminKey } from "@/lib/adminAuth";
 
 /*
  * AI image generation, admin-only. Provider chosen by whichever key exists:
@@ -9,8 +10,7 @@ import { NextResponse } from "next/server";
  */
 
 export async function POST(req: Request) {
-  const adminKey = process.env.ADMIN_PASSWORD ?? "as01admin";
-  if (req.headers.get("x-admin-key") !== adminKey) {
+  if (!(await isValidAdminKey(req.headers.get("x-admin-key")))) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 

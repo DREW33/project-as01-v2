@@ -3,6 +3,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { createClient } from "@supabase/supabase-js";
 import { get, put } from "@vercel/blob";
+import { isValidAdminKey } from "@/lib/adminAuth";
 
 /*
  * Lead store, picked by available credentials:
@@ -58,8 +59,7 @@ async function readFileLeads(): Promise<Lead[]> {
 }
 
 export async function GET(req: Request) {
-  const adminKey = process.env.ADMIN_PASSWORD ?? "as01admin";
-  if (req.headers.get("x-admin-key") !== adminKey) {
+  if (!(await isValidAdminKey(req.headers.get("x-admin-key")))) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
@@ -131,4 +131,32 @@ export async function POST(req: Request) {
     // read-only FS — accept anyway so the UX flow continues
   }
   return NextResponse.json({ ok: true, lead, store: "file" });
+}
+
+export async function DELETE(req: Request) {
+  if (!(await isValidAdminKey(req.headers.get("x-admin-key")))) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+  const { id } = await req.json().catch(() => ({}));
+  if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
+
+  if (supabase) {
+    const { error } = await supabase.from("leads").delete().eq("id", id);
+    if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true });
+  }
+
+  if (hasBlob) {
+    const leads = (await readBlobLeads()).filter((l) => l.id !== id);
+    await writeBlobLeads(leads);
+    return NextResponse.json({ ok: true });
+  }
+
+  const leads = (await readFileLeads()).filter((l) => l.id !== id);
+  try {
+    await fs.writeFile(dataFile, JSON.stringify(leads, null, 2), "utf-8");
+  } catch {
+    /* ignore */
+  }
+  return NextResponse.json({ ok: true });
 }

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isValidAdminKey } from "@/lib/adminAuth";
 
 /*
  * AI Marketing Studio (admin-only) — generates Instagram content via
@@ -24,8 +25,7 @@ const TASKS: Record<string, string> = {
 };
 
 export async function POST(req: Request) {
-  const adminKey = process.env.ADMIN_PASSWORD ?? "as01admin";
-  if (req.headers.get("x-admin-key") !== adminKey) {
+  if (!(await isValidAdminKey(req.headers.get("x-admin-key")))) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 

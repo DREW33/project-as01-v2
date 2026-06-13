@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isValidAdminKey } from "@/lib/adminAuth";
 
 /*
  * Client Business Analyzer (admin-only).
@@ -69,8 +70,7 @@ async function inspectSite(url: string): Promise<SiteSignals> {
 }
 
 export async function POST(req: Request) {
-  const adminKey = process.env.ADMIN_PASSWORD ?? "as01admin";
-  if (req.headers.get("x-admin-key") !== adminKey) {
+  if (!(await isValidAdminKey(req.headers.get("x-admin-key")))) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
   const apiKey = process.env.OPENROUTER_API_KEY;

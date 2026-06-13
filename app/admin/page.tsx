@@ -40,7 +40,9 @@ export default function AdminPage() {
   const [error, setError] = useState(false);
   const [checking, setChecking] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
-  const [tab, setTab] = useState<"leads" | "calls" | "analytics" | "studio" | "analyzer">("leads");
+  const [tab, setTab] = useState<
+    "leads" | "calls" | "analytics" | "studio" | "analyzer" | "admins"
+  >("leads");
   const [studioTopic, setStudioTopic] = useState("");
   const [studioResult, setStudioResult] = useState("");
   const [studioLoading, setStudioLoading] = useState<string | null>(null);
@@ -91,6 +93,69 @@ export default function AdminPage() {
       setTimeout(() => setAzCopied(""), 1500);
     });
   };
+
+  const deleteLead = async (id: string) => {
+    if (!confirm("Delete this lead permanently?")) return;
+    setLeads((ls) => ls.filter((l) => l.id !== id));
+    try {
+      await fetch("/api/leads", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-key": sessionStorage.getItem("as01_admin_key") ?? "",
+        },
+        body: JSON.stringify({ id }),
+      });
+    } catch {
+      /* optimistic — already removed from UI */
+    }
+  };
+
+  // Admin account management
+  const [admins, setAdmins] = useState<{ username: string; createdAt: string }[]>([]);
+  const [newAdmin, setNewAdmin] = useState({ username: "", password: "" });
+  const [pwChange, setPwChange] = useState({ username: "", password: "" });
+  const [adminMsg, setAdminMsg] = useState("");
+
+  const loadAdmins = async () => {
+    try {
+      const r = await fetch("/api/admin-users", {
+        headers: { "x-admin-key": sessionStorage.getItem("as01_admin_key") ?? "" },
+      });
+      const d = await r.json();
+      setAdmins(d.admins ?? []);
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const adminAction = async (body: Record<string, string>, okMsg: string) => {
+    setAdminMsg("");
+    try {
+      const r = await fetch("/api/admin-users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-key": sessionStorage.getItem("as01_admin_key") ?? "",
+        },
+        body: JSON.stringify(body),
+      });
+      const d = await r.json();
+      if (d.ok) {
+        setAdminMsg(okMsg);
+        loadAdmins();
+      } else {
+        setAdminMsg(d.error || "Something went wrong.");
+      }
+    } catch {
+      setAdminMsg("Network error.");
+    }
+  };
+
+  useEffect(() => {
+    if (authed && tab === "admins") loadAdmins();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authed, tab]);
 
   const downloadPdf = () => {
     if (!azResult || azResult.error) return;
@@ -376,6 +441,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#030014;color:#e8edf5}
               ["analytics", "📊 Analytics"],
               ["studio", "✨ AI Studio"],
               ["analyzer", "🔍 Client Analyzer"],
+              ["admins", "👤 Admins"],
             ] as const
           ).map(([id, label]) => (
             <button
@@ -410,6 +476,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#030014;color:#e8edf5}
                     <th className="px-5 py-4">Message</th>
                     <th className="px-5 py-4">Intent</th>
                     <th className="px-5 py-4">Status</th>
+                    <th className="px-5 py-4 text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -437,8 +504,18 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#030014;color:#e8edf5}
                       </td>
                       <td className="px-5 py-4">
                         <span className="rounded-full bg-green-500/15 px-2.5 py-1 text-[11px] font-semibold uppercase text-green-300">
-                          {l.status} · AI call queued
+                          {l.status}
                         </span>
+                      </td>
+                      <td className="px-5 py-4 text-right">
+                        <button
+                          onClick={() => deleteLead(l.id)}
+                          aria-label="Delete lead"
+                          title="Delete lead"
+                          className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-[11px] font-semibold text-red-300 transition hover:bg-red-500/25"
+                        >
+                          🗑 Delete
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -797,6 +874,131 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#030014;color:#e8edf5}
                   )}
                 </>
               )}
+            </div>
+          </div>
+        )}
+
+        {tab === "admins" && (
+          <div className="mt-6 grid gap-6 lg:grid-cols-2">
+            <div className="space-y-6">
+              <div className="glass rounded-2xl p-6">
+                <h3 className="font-display text-sm font-bold uppercase tracking-wider text-white">
+                  ➕ Add New Admin
+                </h3>
+                <p className="mt-1 text-xs text-slate-500">
+                  Give a teammate their own login. They&apos;ll use the username &amp; password
+                  below on the admin login page.
+                </p>
+                <input
+                  className={`${inputCls} mt-4`}
+                  placeholder="Username (e.g. rahul)"
+                  value={newAdmin.username}
+                  onChange={(e) => setNewAdmin((f) => ({ ...f, username: e.target.value }))}
+                />
+                <input
+                  className={`${inputCls} mt-3`}
+                  type="password"
+                  placeholder="Password (min 6 characters)"
+                  value={newAdmin.password}
+                  onChange={(e) => setNewAdmin((f) => ({ ...f, password: e.target.value }))}
+                />
+                <button
+                  onClick={() =>
+                    adminAction(
+                      { action: "add", ...newAdmin },
+                      `Admin "${newAdmin.username}" added.`
+                    ).then(() => setNewAdmin({ username: "", password: "" }))
+                  }
+                  className="btn-neon font-display mt-4 w-full rounded-xl px-6 py-3 text-xs font-bold uppercase tracking-wider text-white"
+                >
+                  Create Admin
+                </button>
+              </div>
+
+              <div className="glass rounded-2xl p-6">
+                <h3 className="font-display text-sm font-bold uppercase tracking-wider text-white">
+                  🔑 Change Admin Password
+                </h3>
+                <p className="mt-1 text-xs text-slate-500">
+                  Pick an admin and set a new password for them.
+                </p>
+                <select
+                  className={`${inputCls} mt-4`}
+                  value={pwChange.username}
+                  onChange={(e) => setPwChange((f) => ({ ...f, username: e.target.value }))}
+                >
+                  <option value="" className="bg-[#0a0420]">Select admin…</option>
+                  {admins.map((a) => (
+                    <option key={a.username} value={a.username} className="bg-[#0a0420]">
+                      {a.username}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  className={`${inputCls} mt-3`}
+                  type="password"
+                  placeholder="New password (min 6 characters)"
+                  value={pwChange.password}
+                  onChange={(e) => setPwChange((f) => ({ ...f, password: e.target.value }))}
+                />
+                <button
+                  onClick={() =>
+                    adminAction(
+                      { action: "changePassword", ...pwChange },
+                      `Password updated for "${pwChange.username}".`
+                    ).then(() => setPwChange({ username: "", password: "" }))
+                  }
+                  disabled={!pwChange.username}
+                  className="btn-ghost font-display mt-4 w-full rounded-xl px-6 py-3 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-50"
+                >
+                  Update Password
+                </button>
+              </div>
+
+              {adminMsg && (
+                <p className="rounded-xl border border-purple-500/30 bg-purple-500/10 px-4 py-3 text-sm text-purple-200">
+                  {adminMsg}
+                </p>
+              )}
+            </div>
+
+            <div className="glass h-fit rounded-2xl p-6">
+              <h3 className="font-display text-sm font-bold uppercase tracking-wider text-white">
+                Team Admins
+              </h3>
+              <p className="mt-1 text-xs text-slate-500">
+                Your master password (set at setup) always works and isn&apos;t shown here.
+              </p>
+              <div className="mt-4 space-y-2">
+                {admins.length === 0 ? (
+                  <p className="rounded-xl bg-white/[0.03] p-4 text-center text-sm text-slate-600">
+                    No extra admins yet. Add one on the left.
+                  </p>
+                ) : (
+                  admins.map((a) => (
+                    <div
+                      key={a.username}
+                      className="flex items-center justify-between rounded-xl bg-white/[0.04] px-4 py-3"
+                    >
+                      <div>
+                        <p className="text-sm font-semibold text-white">{a.username}</p>
+                        <p className="text-[11px] text-slate-500">
+                          Added {new Date(a.createdAt).toLocaleDateString("en-IN")}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() =>
+                          confirm(`Remove admin "${a.username}"?`) &&
+                          adminAction({ action: "delete", username: a.username }, `Removed "${a.username}".`)
+                        }
+                        className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-[11px] font-semibold text-red-300 transition hover:bg-red-500/25"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         )}
