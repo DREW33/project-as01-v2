@@ -18,6 +18,7 @@ export default function Footer() {
             <a href="#services" className="transition hover:text-white">Services</a>
             <a href="#pricing" className="transition hover:text-white">Pricing</a>
             <a href="#contact" className="transition hover:text-white">Contact</a>
+            <a href="https://instagram.com/project_as01" target="_blank" rel="noopener noreferrer" className="transition hover:text-white">Instagram</a>
             <Link href="/admin" className="transition hover:text-purple-400">Admin</Link>
           </nav>
         </div>

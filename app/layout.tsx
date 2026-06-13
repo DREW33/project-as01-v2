@@ -98,7 +98,7 @@ const jsonLd = {
     "Custom Software",
     "CRM Systems",
   ],
-  sameAs: [],
+  sameAs: ["https://instagram.com/project_as01"],
 };
 
 export default function RootLayout({

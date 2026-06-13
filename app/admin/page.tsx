@@ -176,7 +176,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#030014;color:#e8edf5}
     <div>💬 WhatsApp: <b>+91 96706 21213</b></div>
     <div>📞 Call: <b>+91 96783 49001</b></div>
     <div>🌐 Web: <b>project-as01.vercel.app</b></div>
-    <div>📸 Instagram: <b>@project.as01</b></div>
+    <div>📸 Instagram: <b>@project_as01</b></div>
   </div>
   <div class="disc">Revenue figures are good-faith estimates based on typical industry benchmarks, not guarantees. © ${new Date().getFullYear()} Project AS01 · Guwahati, Assam · Premium Websites, Apps & AI Solutions.</div>
 </div>

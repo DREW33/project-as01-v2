@@ -9,6 +9,7 @@ const inputCls =
 const channels = [
   { icon: "💬", label: "WhatsApp", value: "+91 96706 21213", href: "https://wa.me/919670621213" },
   { icon: "📞", label: "Call Us", value: "+91 96783 49001", href: "tel:+919678349001" },
+  { icon: "📸", label: "Instagram", value: "@project_as01", href: "https://instagram.com/project_as01" },
 ];
 
 export default function Contact() {
