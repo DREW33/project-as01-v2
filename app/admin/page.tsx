@@ -92,6 +92,107 @@ export default function AdminPage() {
     });
   };
 
+  const downloadPdf = () => {
+    if (!azResult || azResult.error) return;
+    const esc = (s = "") =>
+      s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const score = azResult.healthScore ?? 0;
+    const scoreColor = score >= 70 ? "#22c55e" : score >= 40 ? "#f59e0b" : "#ef4444";
+    const li = (arr: string[] = [], color: string, mark: string) =>
+      arr
+        .map(
+          (x) =>
+            `<li><span style="color:${color};font-weight:700;margin-right:8px">${mark}</span>${esc(x)}</li>`
+        )
+        .join("");
+
+    const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Growth Report — ${esc(
+      azForm.business
+    )}</title>
+<style>
+@page{size:A4;margin:0}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#030014;color:#e8edf5}
+.page{width:210mm;min-height:297mm;margin:0 auto;background:#06021a;position:relative;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.45}
+.hero{position:relative;padding:48px 50px 36px;background:linear-gradient(135deg,#1a0b3a,#0a1633);border-bottom:2px solid #7c3aed}
+.brand{display:flex;align-items:center;gap:14px}
+.ring{width:60px;height:60px;border-radius:50%;background:conic-gradient(#a855f7,#3b82f6,#38bdf8,#a855f7);display:flex;align-items:center;justify-content:center}
+.ring span{width:50px;height:50px;border-radius:50%;background:#06021a;display:flex;align-items:center;justify-content:center;font-family:monospace;font-weight:bold;font-size:18px;background-clip:text;color:#a855f7}
+.logo-txt{font-size:26px;font-weight:800;letter-spacing:1px}
+.logo-txt b{color:#fff}.logo-txt em{font-style:normal;background:linear-gradient(92deg,#c084fc,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tag{font-family:monospace;font-size:11px;color:#8b93b5;letter-spacing:3px;margin-top:2px}
+.report-title{margin-top:28px;font-size:30px;font-weight:800;line-height:1.2}
+.report-title em{font-style:normal;background:linear-gradient(92deg,#c084fc,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:#9aa3c7;margin-top:8px;font-size:13px}
+.body{padding:34px 50px}
+.scorewrap{display:flex;gap:24px;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(168,85,247,.25);border-radius:16px;padding:24px;margin-bottom:22px}
+.gauge{width:120px;height:120px;border-radius:50%;flex-shrink:0;background:conic-gradient(${scoreColor} ${score}%,#1e1b34 ${score}% 100%);display:flex;align-items:center;justify-content:center}
+.gauge div{width:92px;height:92px;border-radius:50%;background:#06021a;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.gauge b{font-size:34px;font-weight:800;color:${scoreColor}}
+.gauge small{font-size:10px;color:#8b93b5;letter-spacing:1px}
+.scoremsg h3{font-size:16px;margin-bottom:6px}
+.scoremsg p{color:#9aa3c7;font-size:13px;line-height:1.6}
+.lossbox{background:linear-gradient(135deg,rgba(239,68,68,.14),rgba(124,58,237,.08));border:1px solid rgba(239,68,68,.35);border-radius:16px;padding:22px;margin-bottom:22px}
+.lossbox .lbl{color:#fca5a5;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}
+.lossbox p{margin-top:8px;font-size:15px;line-height:1.6;color:#fff}
+.sec{margin-bottom:22px}
+.sec h2{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:#a855f7;margin-bottom:12px;border-left:3px solid #a855f7;padding-left:10px}
+.sec ul{list-style:none}
+.sec li{font-size:13px;line-height:1.6;color:#dbe2f0;margin-bottom:9px;display:flex}
+.proposal{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:22px;font-size:13px;line-height:1.7;color:#dbe2f0;white-space:pre-line}
+.pkg{display:inline-block;margin-top:10px;background:linear-gradient(92deg,#9333ea,#3b82f6);color:#fff;font-size:12px;font-weight:700;padding:6px 16px;border-radius:99px}
+.footer{margin-top:8px;padding:26px 50px;background:linear-gradient(135deg,#1a0b3a,#0a1633);border-top:2px solid #7c3aed}
+.footer h3{font-size:16px;font-weight:800;margin-bottom:14px}
+.footer h3 em{font-style:normal;background:linear-gradient(92deg,#c084fc,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent}
+.contacts{display:flex;flex-wrap:wrap;gap:10px 26px}
+.contacts div{font-size:12.5px;color:#cdd3ec}
+.contacts b{color:#a855f7}
+.disc{margin-top:16px;font-size:9.5px;color:#5c6480;line-height:1.5}
+</style></head>
+<body><div class="page">
+<div class="blob" style="width:300px;height:300px;background:#7c3aed;top:-60px;left:-60px"></div>
+<div class="blob" style="width:280px;height:280px;background:#2563eb;bottom:200px;right:-80px"></div>
+<div class="hero">
+  <div class="brand"><div class="ring"><span>&lt;/&gt;</span></div><div><div class="logo-txt"><b>project</b> <em>as01</em></div><div class="tag">&lt;/&gt; VIBE CODER &lt;/&gt;</div></div></div>
+  <div class="report-title">Digital Growth Report for<br><em>${esc(azForm.business)}</em></div>
+  <div class="sub">${esc(azForm.industry || "Business")} ${azForm.website ? "· " + esc(azForm.website) : ""} · Prepared ${new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}</div>
+</div>
+<div class="body">
+  <div class="scorewrap">
+    <div class="gauge"><div><b>${score}</b><small>/ 100</small></div></div>
+    <div class="scoremsg"><h3>Online Health Score</h3><p>This measures how well your current online presence attracts and converts customers. ${
+      score >= 70 ? "Good foundation — but real growth is left on the table." : score >= 40 ? "Major gaps are costing you customers every day." : "Critical — you are nearly invisible to online buyers."
+    }</p></div>
+  </div>
+  ${azResult.revenueLoss ? `<div class="lossbox"><div class="lbl">💸 Estimated Revenue Being Lost</div><p>${esc(azResult.revenueLoss)}</p></div>` : ""}
+  ${azResult.problems?.length ? `<div class="sec"><h2>⚠️ Problems We Found</h2><ul>${li(azResult.problems, "#ef4444", "✗")}</ul></div>` : ""}
+  ${azResult.opportunities?.length ? `<div class="sec"><h2>🚀 Growth Opportunities with Project AS01</h2><ul>${li(azResult.opportunities, "#22c55e", "✓")}</ul></div>` : ""}
+  ${azResult.proposal ? `<div class="sec"><h2>📄 Our Proposal</h2><div class="proposal">${esc(azResult.proposal)}${azResult.recommendedPackage ? `<br><span class="pkg">Recommended: ${esc(azResult.recommendedPackage)}</span>` : ""}</div></div>` : ""}
+</div>
+<div class="footer">
+  <h3>Let's grow <em>${esc(azForm.business)}</em> together 🚀</h3>
+  <div class="contacts">
+    <div>💬 WhatsApp: <b>+91 96706 21213</b></div>
+    <div>📞 Call: <b>+91 96783 49001</b></div>
+    <div>🌐 Web: <b>project-as01.vercel.app</b></div>
+    <div>📸 Instagram: <b>@project.as01</b></div>
+  </div>
+  <div class="disc">Revenue figures are good-faith estimates based on typical industry benchmarks, not guarantees. © ${new Date().getFullYear()} Project AS01 · Guwahati, Assam · Premium Websites, Apps & AI Solutions.</div>
+</div>
+</div>
+<script>window.onload=function(){setTimeout(function(){window.print()},400)}</script>
+</body></html>`;
+
+    const w = window.open("", "_blank");
+    if (!w) {
+      alert("Please allow pop-ups to download the PDF report.");
+      return;
+    }
+    w.document.write(html);
+    w.document.close();
+  };
+
   const fetchDaily = async (force = false) => {
     if (dailyLoading) return;
     setDailyLoading(true);
@@ -586,6 +687,12 @@ export default function AdminPage() {
               )}
               {azResult && !azResult.error && (
                 <>
+                  <button
+                    onClick={downloadPdf}
+                    className="btn-neon font-display w-full rounded-xl px-6 py-3.5 text-sm font-bold uppercase tracking-wider text-white"
+                  >
+                    📄 Download Branded PDF Report
+                  </button>
                   <div className="glass rounded-2xl p-6">
                     <div className="flex items-center justify-between">
                       <p className="text-xs uppercase tracking-wider text-slate-500">
