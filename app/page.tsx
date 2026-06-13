@@ -17,6 +17,8 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import LeadModal from "@/components/LeadModal";
 import ChatWidget from "@/components/ChatWidget";
+import VoiceAgent from "@/components/VoiceAgent";
+import Rockets from "@/components/Rockets";
 
 export default function Home() {
   return (
@@ -24,6 +26,7 @@ export default function Home() {
       <LoadingScreen />
       <ScrollProgress />
       <Particles />
+      <Rockets />
       <CursorGlow />
       <Navbar />
       <main className="relative z-10">
@@ -41,6 +44,7 @@ export default function Home() {
       <Footer />
       <LeadModal />
       <ChatWidget />
+      <VoiceAgent />
     </LeadModalProvider>
   );
 }

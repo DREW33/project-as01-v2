@@ -220,6 +220,56 @@ body {
 }
 .animate-marquee { animation: marquee 30s linear infinite; }
 
+/* ---------- flying rockets ---------- */
+.rocket {
+  position: absolute;
+  will-change: transform;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.6));
+}
+.rocket-emoji {
+  display: inline-block;
+  font-size: 26px;
+  line-height: 1;
+}
+/* Rocket 1: bottom-left → top-right, nose pointing up-right */
+.rocket-1 {
+  left: -8%;
+  top: 78%;
+  animation: rocket1 26s linear infinite;
+}
+.rocket-1 .rocket-emoji {
+  transform: rotate(-45deg);
+}
+@keyframes rocket1 {
+  0% { transform: translate(0, 0) scale(0.7); opacity: 0; }
+  8% { opacity: 0.85; }
+  50% { transform: translate(55vw, -42vh) scale(1); }
+  92% { opacity: 0.85; }
+  100% { transform: translate(120vw, -85vh) scale(0.8); opacity: 0; }
+}
+/* Rocket 2: top-right → bottom-left, nose pointing down-left, slower */
+.rocket-2 {
+  right: -8%;
+  top: 18%;
+  animation: rocket2 34s linear infinite;
+  animation-delay: 6s;
+}
+.rocket-2 .rocket-emoji {
+  transform: rotate(135deg);
+  font-size: 20px;
+}
+@keyframes rocket2 {
+  0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+  10% { opacity: 0.7; }
+  50% { transform: translate(-50vw, 40vh) scale(0.85); }
+  90% { opacity: 0.7; }
+  100% { transform: translate(-115vw, 75vh) scale(0.65); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rocket { display: none; }
+}
+
 /* code window scanline */
 .scanlines::after {
   content: "";
