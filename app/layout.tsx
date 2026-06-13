@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s | Project AS01 — Web Development Assam",
   },
   description:
-    "Project AS01 is Assam's premium website & app development company based in Guwahati. Custom websites, mobile apps, AI automation, e-commerce, CRM and enterprise software for businesses across Assam and Northeast India. Free consultation — AI agent calls you in 60 seconds.",
+    "Project AS01 is Assam's premium website & app development company based in Guwahati. Custom websites, mobile apps, AI automation, e-commerce, CRM and enterprise software for businesses across Assam and Northeast India. Get a free consultation today.",
   keywords: [
     "website development company in Assam",
     "web development Guwahati",

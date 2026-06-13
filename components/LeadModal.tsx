@@ -18,11 +18,10 @@ const projectTypes = [
 const budgets = ["₹20,000 – ₹50,000", "₹50,000 – ₹1,50,000", "₹1,50,000 – ₹5,00,000", "₹5,00,000+"];
 
 const workflow = [
-  { icon: "💾", label: "Lead saved to database" },
-  { icon: "💬", label: "WhatsApp confirmation sent" },
-  { icon: "📧", label: "Email confirmation sent" },
-  { icon: "🖥️", label: "Admin dashboard notified" },
-  { icon: "🤖", label: "AI voice agent calling you in <60s…" },
+  { icon: "💾", label: "Request saved securely" },
+  { icon: "🖥️", label: "Our team has been notified" },
+  { icon: "📋", label: "Your project added to our queue" },
+  { icon: "🤝", label: "We'll reach out to you shortly" },
 ];
 
 const inputCls =
@@ -99,7 +98,7 @@ export default function LeadModal() {
                   Let&apos;s build something <span className="gradient-text">legendary</span>
                 </h3>
                 <p className="mt-2 text-sm text-slate-400">
-                  Fill this in — our AI agent will call you within 60 seconds to understand your project.
+                  Fill this in and our team will get back to you shortly to understand your project.
                 </p>
 
                 <form onSubmit={submit} className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -139,10 +138,10 @@ export default function LeadModal() {
                   ✓
                 </div>
                 <h3 className="font-display mt-4 text-center text-2xl font-bold text-white">
-                  Lead received, {form.name.split(" ")[0] || "friend"}!
+                  Thank you, {form.name.split(" ")[0] || "friend"}!
                 </h3>
                 <p className="mt-2 text-center text-sm text-slate-400">
-                  Automation engaged. Here&apos;s what&apos;s happening right now:
+                  We&apos;ve received your request. Here&apos;s what happens next:
                 </p>
                 <div className="mt-6 space-y-3">
                   {workflow.map((w, i) => (
@@ -166,18 +165,14 @@ export default function LeadModal() {
                     </motion.div>
                   ))}
                 </div>
-                <motion.button
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 4 }}
-                  onClick={() => {
-                    close();
-                    window.dispatchEvent(new CustomEvent("as01:voice"));
-                  }}
-                  className="btn-neon font-display mt-6 w-full rounded-xl px-6 py-3.5 text-sm font-bold uppercase tracking-wider text-white"
+                <a
+                  href="https://wa.me/919670621213"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-neon font-display mt-6 block w-full rounded-xl px-6 py-3.5 text-center text-sm font-bold uppercase tracking-wider text-white"
                 >
-                  📞 Answer the AI call now
-                </motion.button>
+                  💬 Chat with us on WhatsApp
+                </a>
                 <button
                   onClick={close}
                   className="btn-ghost font-display mt-3 w-full rounded-xl px-6 py-3 text-sm font-semibold uppercase tracking-wider text-white"

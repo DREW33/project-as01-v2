@@ -24,7 +24,7 @@ function brain(input: string, ctx: ChatCtx): { text: string; saveLead?: { phone:
   if (phoneMatch) {
     ctx.awaiting = null;
     return {
-      text: `Perfect! 📞 I've passed ${phoneMatch[0].trim()} to the team — our AI agent will call you within 60 seconds to understand your project. Keep your phone nearby!`,
+      text: `Perfect! 📞 I've passed ${phoneMatch[0].trim()} to our team — they'll reach out to you shortly to understand your project. Talk soon!`,
       saveLead: { phone: phoneMatch[0].trim() },
     };
   }
@@ -33,7 +33,7 @@ function brain(input: string, ctx: ChatCtx): { text: string; saveLead?: { phone:
   if (ctx.awaiting === "phone") {
     ctx.awaiting = null;
     return {
-      text: "No problem — whenever you're ready, just type your 10-digit number here and we'll call you. Meanwhile, ask me anything about pricing, projects or timelines! 😊",
+      text: "No problem — whenever you're ready, just type your 10-digit number here and our team will reach out. Meanwhile, ask me anything about pricing, projects or timelines! 😊",
     };
   }
 
@@ -45,12 +45,12 @@ function brain(input: string, ctx: ChatCtx): { text: string; saveLead?: { phone:
   // 3. Intent matching, most specific first
   if (/(book|schedule|call me|callback|call back|talk|consult|meeting|demo call|connect)/.test(q))
     return ask(
-      "Let's do it! 🚀 Type your 10-digit mobile number and our AI agent will call you within 60 seconds to discuss your project and book a free consultation."
+      "Let's do it! 🚀 Type your 10-digit mobile number and our team will reach out to discuss your project and book a free consultation."
     );
 
   if (/(price|pricing|cost|charge|budget|rate|kitna|how much|₹|quote|package)/.test(q))
     return {
-      text: "Here's our transparent pricing 💰\n\n• Starter — ₹20,000+: 5-page premium website, 7-day delivery\n• Business — ₹50,000+: custom web app, admin dashboard, AI chatbot (most popular)\n• Premium — custom quote: AI calling, mobile apps, enterprise systems\n\nEvery plan includes futuristic design + AI lead capture. Want an exact quote? Tell me what you're building, or drop your number for a callback!",
+      text: "Here's our transparent pricing 💰\n\n• Starter — ₹20,000+: 5-page premium website, 7-day delivery\n• Business — ₹50,000+: custom web app, admin dashboard, AI chatbot (most popular)\n• Premium — custom quote: mobile apps, AI automation, enterprise systems\n\nEvery plan includes futuristic design + smart lead capture. Want an exact quote? Tell me what you're building, or drop your number for a callback!",
     };
 
   if (/(portfolio|project|work|example|demo|made|built|show me)/.test(q))
@@ -90,7 +90,7 @@ function brain(input: string, ctx: ChatCtx): { text: string; saveLead?: { phone:
 
   if (/(ai|automation|chatbot|agent|voice|calling|whatsapp bot)/.test(q))
     return {
-      text: "AI is our home turf 🤖 We build:\n\n• AI chatbots (like me!)\n• AI calling agents — they phone your leads in <60s, in Hindi/English/Assamese\n• CRM + WhatsApp automation\n• Full business automation with Claude & OpenAI\n\nClients see 3.2x more qualified meetings. What would you like to automate?",
+      text: "AI is our home turf 🤖 We build:\n\n• AI chatbots (like me!)\n• CRM + WhatsApp automation\n• Smart lead-capture systems\n• Full business automation with Claude & OpenAI\n\nWe help businesses automate the repetitive work. What would you like to automate?",
     };
 
   if (/(app|android|ios|mobile|play store|application)/.test(q))
@@ -130,7 +130,7 @@ function brain(input: string, ctx: ChatCtx): { text: string; saveLead?: { phone:
 
   if (/(thank|thanks|great|awesome|nice|cool|ok|okay)/.test(q))
     return {
-      text: "Anytime! 😊 If you want to take the next step, I can have our AI agent call you — just type your number. Or keep exploring the live demos in our Projects section!",
+      text: "Anytime! 😊 If you want to take the next step, just type your number and our team will reach out. Or keep exploring the live demos in our Projects section!",
     };
 
   if (/(bye|goodbye|see you|later)/.test(q))
@@ -145,14 +145,14 @@ function brain(input: string, ctx: ChatCtx): { text: string; saveLead?: { phone:
 
   if (/(hi|hello|hey|namaste|namaskar|yo)/.test(q))
     return {
-      text: "Hey there! 👋 I'm AS01, your AI assistant. I can show you our portfolio, explain pricing, or get our AI agent to call you in 60 seconds. What are you building?",
+      text: "Hey there! 👋 I'm AS01, your AI assistant. I can show you our portfolio, explain pricing, or connect you with our team for a free consultation. What are you building?",
     };
 
   // 4. Rotating fallbacks that qualify the lead
   const fallbacks = [
     "Interesting! Tell me a bit more — is this about a website, mobile app, AI automation, or custom software? I'll point you to the right examples and pricing 🎯",
     "I want to get this right for you 🤔 Could you share what kind of business you run and what you're trying to build? Or type your number and our team will call to discuss it properly.",
-    "Good question — that's one for our human experts! Type your 10-digit number and our AI agent will call you in 60 seconds, or use the Get Free Consultation button. Meanwhile: pricing, portfolio and timelines — I know those cold 😎",
+    "Good question — that's one for our human experts! Type your 10-digit number and our team will reach out, or use the Get Free Consultation button. Meanwhile: pricing, portfolio and timelines — I know those cold 😎",
   ];
   const text = fallbacks[ctx.fallbacks % fallbacks.length];
   ctx.fallbacks += 1;
@@ -164,7 +164,7 @@ export default function ChatWidget() {
   const [msgs, setMsgs] = useState<Msg[]>([
     {
       role: "bot",
-      text: "👋 Welcome to Project AS01! I'm your AI assistant. Ask me about pricing, projects, or AI automation — or type your phone number anytime and our AI agent will call you in 60 seconds.",
+      text: "👋 Welcome to Project AS01! I'm your AI assistant. Ask me about pricing, projects, or AI automation — or type your phone number anytime and our team will reach out to you.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -204,7 +204,7 @@ export default function ChatWidget() {
           ...m,
           {
             role: "bot",
-            text: `Perfect! 📞 I've passed ${phoneMatch[0].trim()} to the team — our AI agent will call you within 60 seconds to understand your project. Keep your phone nearby!`,
+            text: `Perfect! 📞 I've passed ${phoneMatch[0].trim()} to our team — they'll reach out to you shortly to understand your project. Talk soon!`,
           },
         ]);
       }, 700);
@@ -277,17 +277,6 @@ export default function ChatWidget() {
                   Online · replies instantly
                 </p>
               </div>
-              <button
-                onClick={() => {
-                  setOpen(false);
-                  window.dispatchEvent(new CustomEvent("as01:voice"));
-                }}
-                aria-label="Start voice call"
-                title="Talk to the AI by voice"
-                className="ml-auto flex h-10 w-10 items-center justify-center rounded-full border border-green-500/40 bg-green-500/10 text-lg transition hover:scale-110 hover:bg-green-500/25"
-              >
-                📞
-              </button>
             </div>
 
             <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
@@ -340,11 +329,11 @@ export default function ChatWidget() {
                 <button
                   onClick={() => {
                     setOpen(false);
-                    openModal("AI Chat — Request Call");
+                    openModal("AI Chat — Request Callback");
                   }}
                   className="rounded-full border border-green-500/40 bg-green-500/10 px-3 py-1.5 text-[11px] text-green-300 transition hover:bg-green-500/25"
                 >
-                  📞 Get AI call now
+                  📞 Request a callback
                 </button>
               </div>
               <form

@@ -116,7 +116,7 @@ export default function Contact() {
                   {sending ? "Sending…" : "Send Message 🚀"}
                 </button>
                 <p className="text-center text-xs text-slate-500 sm:col-span-2">
-                  Average reply time: under 60 seconds (our AI agent never sleeps).
+                  We typically reply within a few hours. For urgent needs, WhatsApp us.
                 </p>
               </form>
             ) : (
@@ -126,7 +126,7 @@ export default function Contact() {
                 </div>
                 <h3 className="font-display mt-5 text-2xl font-bold text-white">Message received!</h3>
                 <p className="mt-2 max-w-sm text-sm text-slate-400">
-                  Our AI agent is processing your request and will reach out within 60 seconds. Keep your phone close. ⚡
+                  Thanks for reaching out — our team has your details and will get back to you shortly. ⚡
                 </p>
               </div>
             )}

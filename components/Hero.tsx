@@ -184,7 +184,7 @@ export default function Hero() {
             {[
               ["50+", "Projects shipped"],
               ["3.2x", "Avg. conversion lift"],
-              ["<60s", "AI lead response"],
+              ["7 days", "Fastest delivery"],
             ].map(([v, l]) => (
               <div key={l}>
                 <p className="font-display gradient-text text-2xl font-bold">
@@ -210,7 +210,7 @@ export default function Hero() {
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               className="glass absolute -right-4 -top-6 rounded-xl px-4 py-2.5 text-xs font-semibold text-purple-200 shadow-[0_0_24px_rgba(168,85,247,0.35)]"
             >
-              ⚡ AI agent online
+              ⚡ Built for speed
             </motion.div>
             <motion.div
               animate={{ y: [0, 10, 0] }}

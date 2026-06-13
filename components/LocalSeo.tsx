@@ -12,7 +12,7 @@ const faqs = [
   },
   {
     q: "How much does website development cost in Assam?",
-    a: "A professional business website in Assam starts at ₹20,000 with Project AS01, delivered in 7 days. Business platforms with admin dashboards, AI chatbots and payment gateways start at ₹50,000. Enterprise software, mobile apps and AI automation are quoted custom — get a free consultation and our AI agent will call you in 60 seconds.",
+    a: "A professional business website in Assam starts at ₹20,000 with Project AS01, delivered in 7 days. Business platforms with admin dashboards, AI chatbots and payment gateways start at ₹50,000. Enterprise software, mobile apps and AI automation are quoted custom — get a free consultation and our team will get back to you quickly.",
   },
   {
     q: "Do you build mobile apps and AI automation in Guwahati?",
