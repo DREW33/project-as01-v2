@@ -214,9 +214,16 @@ export default function AdminPage() {
       <header className="glass-strong sticky top-0 z-40 border-b border-white/10">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8">
           <div className="flex items-center gap-4">
-            <Link href="/" aria-label="Project AS01 home" className="transition hover:opacity-80">
+            <button
+              onClick={() => {
+                setTab("leads");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              aria-label="Admin dashboard home"
+              className="transition hover:opacity-80"
+            >
               <Logo />
-            </Link>
+            </button>
             <span className="rounded-full border border-purple-500/40 bg-purple-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-purple-300">
               Admin
             </span>
