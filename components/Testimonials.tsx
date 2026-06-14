@@ -34,8 +34,8 @@ export default function Testimonials() {
           transition={{ duration: 0.7 }}
           className="text-center"
         >
-          <p className="font-display text-xs uppercase tracking-[0.35em] text-purple-400">Testimonials</p>
-          <h2 className="font-display mt-3 text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
+          <p className="font-display text-xs uppercase tracking-[0.35em] text-[#a259ff]">Testimonials</p>
+          <h2 className="headline mt-3 text-[12vw] leading-[0.85] text-white sm:text-6xl lg:text-7xl">
             Clients Who <span className="gradient-text">Leveled Up</span>
           </h2>
         </motion.div>

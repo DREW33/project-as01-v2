@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import Logo from "./Logo";
 import { useLeadModal } from "./LeadModalContext";
@@ -15,6 +14,8 @@ const links = [
   { href: "#contact", label: "Contact" },
 ];
 
+type LenisLike = { scrollTo: (t: number | string, o?: { offset?: number }) => void };
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -27,6 +28,20 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // navigate via Lenis so anchor jumps are smooth + snappy (no fighting the
+  // smooth-scroll). Falls back to native behaviour if Lenis isn't ready.
+  const goTo = (href: string) => {
+    setMenuOpen(false);
+    const lenis = (window as unknown as { lenis?: LenisLike }).lenis;
+    if (href === "#") {
+      if (lenis) lenis.scrollTo(0);
+      else window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    if (lenis) lenis.scrollTo(href, { offset: -72 });
+    else document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <motion.header
       initial={{ y: -80, opacity: 0 }}
@@ -37,16 +52,20 @@ export default function Navbar() {
       }`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8">
-        <Link href="#" aria-label="Project AS01 home">
+        <button onClick={() => goTo("#")} aria-label="Project AS01 home" className="cursor-pointer">
           <Logo />
-        </Link>
+        </button>
 
         <ul className="hidden items-center gap-5 md:flex lg:gap-7">
           {links.map((l) => (
             <li key={l.href}>
               <a
                 href={l.href}
-                className="text-sm font-medium text-slate-300 transition hover:text-white hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.9)]"
+                onClick={(e) => {
+                  e.preventDefault();
+                  goTo(l.href);
+                }}
+                className="mono-label transition hover:text-white"
               >
                 {l.label}
               </a>
@@ -57,9 +76,9 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => openModal("Get Free Consultation")}
-            className="btn-neon font-display hidden rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white sm:block"
+            className="btn-neon font-display hidden px-5 py-2.5 text-xs font-bold uppercase tracking-[0.12em] text-white sm:block"
           >
-            Free Consultation
+            Contact Us
           </button>
           <button
             className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-full border border-white/15 md:hidden"
@@ -83,7 +102,10 @@ export default function Navbar() {
               <li key={l.href}>
                 <a
                   href={l.href}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    goTo(l.href);
+                  }}
                   className="block rounded-lg px-4 py-3 text-sm text-slate-200 transition hover:bg-white/5"
                 >
                   {l.label}

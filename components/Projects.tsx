@@ -1,27 +1,59 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { categories, projects, type Project } from "@/lib/data";
 import { useLeadModal } from "./LeadModalContext";
 
-/* Live thumbnail: the REAL demo website rendered desktop-size in a scaled-down iframe */
-function LiveThumb({ p, anchor = "" }: { p: Project; anchor?: string }) {
+/* Live thumbnail: the REAL demo website in a scaled-down iframe.
+   The iframe is only mounted once the card scrolls near the viewport, so the
+   page doesn't try to load 17 external sites at once (keeps it fast). Until
+   then a branded gradient placeholder stands in. */
+function LiveThumb({ p, anchor = "", eager = false }: { p: Project; anchor?: string; eager?: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [show, setShow] = useState(eager);
+
+  useEffect(() => {
+    if (show) return;
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setShow(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "250px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [show]);
+
   return (
     <div
+      ref={ref}
       className={`relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-gradient-to-br ${p.accent}`}
     >
-      <iframe
-        src={p.demoUrl + anchor}
-        title={`${p.title} preview`}
-        loading="lazy"
-        tabIndex={-1}
-        aria-hidden
-        scrolling="no"
-        className="pointer-events-none absolute left-0 top-0 origin-top-left border-0 bg-white"
-        style={{ width: "400%", height: "400%", transform: "scale(0.25)" }}
-      />
+      {show ? (
+        <iframe
+          src={p.demoUrl + anchor}
+          title={`${p.title} preview`}
+          loading="lazy"
+          tabIndex={-1}
+          aria-hidden
+          scrolling="no"
+          className="pointer-events-none absolute left-0 top-0 origin-top-left border-0 bg-white"
+          style={{ width: "400%", height: "400%", transform: "scale(0.25)" }}
+        />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="font-display px-4 text-center text-sm font-bold uppercase tracking-wider text-white/85">
+            {p.title}
+          </span>
+        </div>
+      )}
       <span className="absolute bottom-2 right-2 rounded-full bg-black/60 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-green-300 backdrop-blur">
         ● Live
       </span>
@@ -34,7 +66,7 @@ function LiveFrame({ p }: { p: Project }) {
   return (
     <div className="relative overflow-hidden rounded-xl border border-white/10 bg-white">
       {/* browser chrome */}
-      <div className="flex items-center gap-1.5 bg-[#0a0420] px-3 py-2.5">
+      <div className="flex items-center gap-1.5 bg-[#0c0c0f] px-3 py-2.5">
         <span className="h-2.5 w-2.5 rounded-full bg-red-400/90" />
         <span className="h-2.5 w-2.5 rounded-full bg-yellow-400/90" />
         <span className="h-2.5 w-2.5 rounded-full bg-green-400/90" />
@@ -143,8 +175,8 @@ function ProjectModal({ p, onClose }: { p: Project; onClose: () => void }) {
               )}
               {tab === "screens" && (
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <LiveThumb p={p} />
-                  <LiveThumb p={p} anchor="#s2" />
+                  <LiveThumb p={p} eager />
+                  <LiveThumb p={p} anchor="#s2" eager />
                 </div>
               )}
               {tab === "case" && (
@@ -204,14 +236,14 @@ export default function Projects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7 }}
-          className="text-center"
+          className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
         >
-          <p className="font-display text-xs uppercase tracking-[0.35em] text-purple-400">Portfolio</p>
-          <h2 className="font-display mt-3 text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
-            Projects That <span className="gradient-text">Speak For Themselves</span>
+          <h2 className="headline text-[14vw] leading-[0.85] text-outline sm:text-[11vw] lg:text-[8rem]">
+            Projects
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-slate-400">
-            Tap any card to open its live preview, screenshots, case study and full tech stack.
+          <p className="max-w-sm text-sm font-medium uppercase tracking-wide text-slate-400 md:pb-4">
+            Tap any card to open its live preview, screenshots, case study and full
+            tech stack.
           </p>
         </motion.div>
 

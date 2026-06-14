@@ -47,9 +47,9 @@ export default function Contact() {
           transition={{ duration: 0.7 }}
           className="text-center"
         >
-          <p className="font-display text-xs uppercase tracking-[0.35em] text-blue-400">Contact</p>
-          <h2 className="font-display mt-3 text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
-            Let&apos;s Build Your <span className="gradient-text">Next Big Thing</span>
+          <p className="font-display text-xs uppercase tracking-[0.35em] text-[#1abcfe]">Contact</p>
+          <h2 className="headline mt-3 text-[12vw] leading-[0.85] text-white sm:text-6xl lg:text-7xl">
+            Next Big <span className="gradient-text">Thing</span>
           </h2>
         </motion.div>
 

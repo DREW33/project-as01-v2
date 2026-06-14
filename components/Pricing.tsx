@@ -17,9 +17,9 @@ export default function Pricing() {
           transition={{ duration: 0.7 }}
           className="text-center"
         >
-          <p className="font-display text-xs uppercase tracking-[0.35em] text-purple-400">Pricing</p>
-          <h2 className="font-display mt-3 text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
-            Transparent Pricing, <span className="gradient-text">Premium Results</span>
+          <p className="font-display text-xs uppercase tracking-[0.35em] text-[#a259ff]">Pricing</p>
+          <h2 className="headline mt-3 text-[12vw] leading-[0.85] text-white sm:text-6xl lg:text-7xl">
+            Premium <span className="gradient-text">Results</span>
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-slate-400">
             Every plan includes futuristic design, blazing performance and AI-powered lead capture.

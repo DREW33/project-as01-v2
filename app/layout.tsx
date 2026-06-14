@@ -1,18 +1,27 @@
 import type { Metadata } from "next";
-import { Orbitron, Space_Grotesk } from "next/font/google";
+import { Archivo, Space_Grotesk, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "@/lib/site";
 
-const orbitron = Orbitron({
+const archivo = Archivo({
   subsets: ["latin"],
-  variable: "--font-orbitron",
-  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-archivo",
+  weight: ["400", "700", "800", "900"],
+  display: "swap",
 });
 
 const grotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-grotesk",
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono-space",
+  weight: ["400"],
+  display: "swap",
 });
 
 const siteUrl = SITE_URL;
@@ -106,11 +115,22 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${orbitron.variable} ${grotesk.variable}`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${archivo.variable} ${grotesk.variable} ${spaceMono.variable}`}
+    >
       <body className="antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {/* apply the saved accent colour before first paint (no flash) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var a=localStorage.getItem('as01-accent');if(a)document.documentElement.style.setProperty('--accent',a);}catch(e){}",
+          }}
         />
         {children}
       </body>

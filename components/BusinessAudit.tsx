@@ -78,11 +78,11 @@ export default function BusinessAudit() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
           >
-            <p className="font-display text-xs uppercase tracking-[0.35em] text-purple-400">
+            <p className="font-display text-xs uppercase tracking-[0.35em] text-[#a259ff]">
               Free AI Tool
             </p>
-            <h2 className="font-display mt-3 text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
-              Is Your Business <span className="gradient-text">Losing Money Online?</span>
+            <h2 className="headline mt-3 text-[11vw] leading-[0.88] text-white sm:text-5xl lg:text-6xl">
+              Losing Money <span className="gradient-text">Online?</span>
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-slate-400">
               Get a free AI-powered audit of your business in 30 seconds. See your online
@@ -136,7 +136,7 @@ export default function BusinessAudit() {
                   <div className="relative h-20 w-20">
                     <span className="absolute inset-0 animate-ping rounded-full bg-purple-500/30" />
                     <span className="logo-ring absolute inset-0 rounded-full" />
-                    <span className="absolute inset-[3px] flex items-center justify-center rounded-full bg-[#0a0420] font-mono text-lg font-bold">
+                    <span className="absolute inset-[3px] flex items-center justify-center rounded-full bg-[#0c0c0f] font-mono text-lg font-bold">
                       <span className="gradient-text">{"</>"}</span>
                     </span>
                   </div>
@@ -228,7 +228,7 @@ export default function BusinessAudit() {
                           className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full"
                           style={{ background: `conic-gradient(${scoreColor} ${score}%, rgba(255,255,255,0.08) ${score}% 100%)` }}
                         >
-                          <div className="flex h-[74px] w-[74px] flex-col items-center justify-center rounded-full bg-[#0a0420]">
+                          <div className="flex h-[74px] w-[74px] flex-col items-center justify-center rounded-full bg-[#0c0c0f]">
                             <span className="font-display text-2xl font-extrabold" style={{ color: scoreColor }}>
                               {score}
                             </span>
