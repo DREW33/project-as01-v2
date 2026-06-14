@@ -41,7 +41,7 @@ export default function AdminPage() {
   const [checking, setChecking] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [tab, setTab] = useState<
-    "leads" | "calls" | "analytics" | "studio" | "analyzer" | "admins"
+    "leads" | "calls" | "analytics" | "studio" | "analyzer" | "prospects" | "admins"
   >("leads");
   const [studioTopic, setStudioTopic] = useState("");
   const [studioResult, setStudioResult] = useState("");
@@ -67,8 +67,9 @@ export default function AdminPage() {
   const [azLoading, setAzLoading] = useState(false);
   const [azCopied, setAzCopied] = useState("");
 
-  const runAnalysis = async () => {
-    if (!azForm.business.trim() || azLoading) return;
+  const runAnalysis = async (override?: typeof azForm) => {
+    const form = override ?? azForm;
+    if (!form.business.trim() || azLoading) return;
     setAzLoading(true);
     setAzResult(null);
     try {
@@ -78,7 +79,7 @@ export default function AdminPage() {
           "Content-Type": "application/json",
           "x-admin-key": sessionStorage.getItem("as01_admin_key") ?? "",
         },
-        body: JSON.stringify(azForm),
+        body: JSON.stringify(form),
       });
       setAzResult(await r.json());
     } catch {
@@ -93,6 +94,103 @@ export default function AdminPage() {
       setTimeout(() => setAzCopied(""), 1500);
     });
   };
+
+  // ---- Outbound Prospects CRM ----
+  type Prospect = {
+    id: string;
+    business: string;
+    website?: string;
+    industry?: string;
+    phone?: string;
+    status: "to_contact" | "contacted" | "proposal_sent" | "won" | "lost";
+    notes?: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  const STATUSES: { value: Prospect["status"]; label: string; color: string }[] = [
+    { value: "to_contact", label: "To Contact", color: "bg-slate-500/20 text-slate-300" },
+    { value: "contacted", label: "Contacted", color: "bg-blue-500/20 text-blue-300" },
+    { value: "proposal_sent", label: "Proposal Sent", color: "bg-purple-500/20 text-purple-300" },
+    { value: "won", label: "Won 🎉", color: "bg-green-500/20 text-green-300" },
+    { value: "lost", label: "Lost", color: "bg-red-500/20 text-red-300" },
+  ];
+  const [prospects, setProspects] = useState<Prospect[]>([]);
+  const [newProspect, setNewProspect] = useState({ business: "", website: "", industry: "", phone: "" });
+
+  const adminHeaders = () => ({
+    "Content-Type": "application/json",
+    "x-admin-key": sessionStorage.getItem("as01_admin_key") ?? "",
+  });
+
+  const loadProspects = async () => {
+    try {
+      const r = await fetch("/api/prospects", { headers: adminHeaders() });
+      const d = await r.json();
+      setProspects(d.prospects ?? []);
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const saveProspect = async (p: Partial<Prospect>) => {
+    try {
+      const r = await fetch("/api/prospects", {
+        method: "POST",
+        headers: adminHeaders(),
+        body: JSON.stringify({ prospect: p }),
+      });
+      const d = await r.json();
+      if (d.prospect) {
+        setProspects((ls) => {
+          const rest = ls.filter((x) => x.id !== d.prospect.id);
+          return [d.prospect, ...rest];
+        });
+      }
+      return d.prospect;
+    } catch {
+      return null;
+    }
+  };
+
+  const addProspect = async () => {
+    if (!newProspect.business.trim()) return;
+    await saveProspect({ ...newProspect, status: "to_contact" });
+    setNewProspect({ business: "", website: "", industry: "", phone: "" });
+  };
+
+  const updateProspect = (p: Prospect, patch: Partial<Prospect>) => {
+    const next = { ...p, ...patch };
+    setProspects((ls) => ls.map((x) => (x.id === p.id ? next : x))); // optimistic
+    saveProspect(next);
+  };
+
+  const deleteProspect = async (id: string) => {
+    if (!confirm("Remove this prospect?")) return;
+    setProspects((ls) => ls.filter((x) => x.id !== id));
+    try {
+      await fetch("/api/prospects", {
+        method: "POST",
+        headers: adminHeaders(),
+        body: JSON.stringify({ action: "delete", id }),
+      });
+    } catch {
+      /* optimistic */
+    }
+  };
+
+  // Generate a proposal for a prospect: fill the analyzer form, switch tab, run it
+  const proposeForProspect = (p: Prospect) => {
+    const form = { business: p.business, website: p.website || "", industry: p.industry || "", notes: p.notes || "" };
+    setAzForm(form);
+    setTab("analyzer");
+    if (p.status === "to_contact" || p.status === "contacted") updateProspect(p, { status: "proposal_sent" });
+    runAnalysis(form);
+  };
+
+  useEffect(() => {
+    if (authed && tab === "prospects") loadProspects();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authed, tab]);
 
   const deleteLead = async (id: string) => {
     if (!confirm("Delete this lead permanently?")) return;
@@ -441,6 +539,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#030014;color:#e8edf5}
               ["analytics", "📊 Analytics"],
               ["studio", "✨ AI Studio"],
               ["analyzer", "🔍 Client Analyzer"],
+              ["prospects", "📇 Prospects"],
               ["admins", "👤 Admins"],
             ] as const
           ).map(([id, label]) => (
@@ -737,7 +836,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#030014;color:#e8edf5}
                 onChange={(e) => setAzForm((f) => ({ ...f, notes: e.target.value }))}
               />
               <button
-                onClick={runAnalysis}
+                onClick={() => runAnalysis()}
                 disabled={azLoading || !azForm.business.trim()}
                 className="btn-neon font-display mt-4 w-full rounded-xl px-6 py-3 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-50"
               >
@@ -875,6 +974,121 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#030014;color:#e8edf5}
                 </>
               )}
             </div>
+          </div>
+        )}
+
+        {tab === "prospects" && (
+          <div className="mt-6 space-y-6">
+            {/* pipeline summary */}
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+              {STATUSES.map((s) => (
+                <div key={s.value} className="glass rounded-xl p-4 text-center">
+                  <p className="font-display gradient-text text-2xl font-extrabold">
+                    {prospects.filter((p) => p.status === s.value).length}
+                  </p>
+                  <p className="mt-1 text-[10px] uppercase tracking-wider text-slate-500">{s.label}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* add prospect */}
+            <div className="glass rounded-2xl p-6">
+              <h3 className="font-display text-sm font-bold uppercase tracking-wider text-white">
+                ➕ Add a Prospect
+              </h3>
+              <p className="mt-1 text-xs text-slate-500">
+                Found a business with a weak/no website? Add it here, then hit Generate Proposal
+                to send them a report.
+              </p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <input className={inputCls} placeholder="Business name *" value={newProspect.business} onChange={(e) => setNewProspect((f) => ({ ...f, business: e.target.value }))} />
+                <input className={inputCls} placeholder="Website (or blank)" value={newProspect.website} onChange={(e) => setNewProspect((f) => ({ ...f, website: e.target.value }))} />
+                <input className={inputCls} placeholder="Industry" value={newProspect.industry} onChange={(e) => setNewProspect((f) => ({ ...f, industry: e.target.value }))} />
+                <input className={inputCls} placeholder="Phone / WhatsApp" value={newProspect.phone} onChange={(e) => setNewProspect((f) => ({ ...f, phone: e.target.value }))} />
+              </div>
+              <button
+                onClick={addProspect}
+                disabled={!newProspect.business.trim()}
+                className="btn-neon font-display mt-4 rounded-xl px-6 py-3 text-xs font-bold uppercase tracking-wider text-white disabled:opacity-50"
+              >
+                Add to Pipeline
+              </button>
+            </div>
+
+            {/* list */}
+            {prospects.length === 0 ? (
+              <div className="glass rounded-2xl p-10 text-center">
+                <p className="text-3xl">📇</p>
+                <p className="mt-3 text-sm text-slate-400">
+                  No prospects yet. Find businesses on Google Maps / JustDial with weak websites and add them above.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {prospects.map((p) => {
+                  const st = STATUSES.find((s) => s.value === p.status) ?? STATUSES[0];
+                  return (
+                    <div key={p.id} className="glass rounded-2xl p-5">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div>
+                          <p className="font-display text-base font-bold text-white">{p.business}</p>
+                          <p className="text-xs text-slate-500">
+                            {p.industry || "—"}
+                            {p.website ? ` · ${p.website}` : ""}
+                            {p.phone ? ` · ${p.phone}` : ""}
+                          </p>
+                        </div>
+                        <span className={`rounded-full px-3 py-1 text-[11px] font-semibold ${st.color}`}>
+                          {st.label}
+                        </span>
+                      </div>
+                      <div className="mt-3 flex flex-wrap items-center gap-2">
+                        <select
+                          value={p.status}
+                          onChange={(e) => updateProspect(p, { status: e.target.value as Prospect["status"] })}
+                          className="rounded-lg border border-white/10 bg-white/[0.05] px-3 py-2 text-xs text-white outline-none"
+                        >
+                          {STATUSES.map((s) => (
+                            <option key={s.value} value={s.value} className="bg-[#0a0420]">{s.label}</option>
+                          ))}
+                        </select>
+                        <button
+                          onClick={() => proposeForProspect(p)}
+                          className="btn-neon rounded-lg px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-white"
+                        >
+                          🔍 Generate Proposal
+                        </button>
+                        {p.phone && (
+                          <a
+                            href={`https://wa.me/${p.phone.replace(/[^0-9]/g, "")}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-ghost rounded-lg px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-white"
+                          >
+                            💬 WhatsApp
+                          </a>
+                        )}
+                        <button
+                          onClick={() => deleteProspect(p.id)}
+                          className="ml-auto rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-[11px] font-semibold text-red-300 transition hover:bg-red-500/25"
+                        >
+                          🗑 Remove
+                        </button>
+                      </div>
+                      <textarea
+                        defaultValue={p.notes}
+                        onBlur={(e) => {
+                          if (e.target.value !== (p.notes || "")) updateProspect(p, { notes: e.target.value });
+                        }}
+                        placeholder="Notes (last call, follow-up date, budget hints…)"
+                        rows={2}
+                        className={`${inputCls} mt-3`}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
 
