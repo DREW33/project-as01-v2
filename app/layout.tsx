@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Orbitron, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import { SITE_URL } from "@/lib/site";
 
 const orbitron = Orbitron({
   subsets: ["latin"],
@@ -14,7 +15,7 @@ const grotesk = Space_Grotesk({
   weight: ["300", "400", "500", "600", "700"],
 });
 
-const siteUrl = "https://projectas01.com";
+const siteUrl = SITE_URL;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
