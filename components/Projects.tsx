@@ -211,7 +211,7 @@ export default function Projects() {
             Projects That <span className="gradient-text">Speak For Themselves</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-slate-400">
-            Hover any card to feel it. Click to open the live preview, screenshots, case study and full tech stack.
+            Tap any card to open its live preview, screenshots, case study and full tech stack.
           </p>
         </motion.div>
 
