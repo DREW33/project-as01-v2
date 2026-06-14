@@ -32,7 +32,23 @@ function normalizeUrl(raw: string): string | null {
   let u = raw.trim();
   if (!/^https?:\/\//i.test(u)) u = "https://" + u;
   try {
-    return new URL(u).toString();
+    const parsed = new URL(u);
+    if (!/^https?:$/.test(parsed.protocol)) return null;
+    const h = parsed.hostname.toLowerCase();
+    if (
+      h === "localhost" ||
+      h === "0.0.0.0" ||
+      h.endsWith(".local") ||
+      h.endsWith(".internal") ||
+      /^127\./.test(h) ||
+      /^10\./.test(h) ||
+      /^192\.168\./.test(h) ||
+      /^169\.254\./.test(h) ||
+      /^172\.(1[6-9]|2\d|3[01])\./.test(h)
+    ) {
+      return null;
+    }
+    return parsed.toString();
   } catch {
     return null;
   }

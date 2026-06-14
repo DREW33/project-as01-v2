@@ -4,6 +4,7 @@ import path from "path";
 import { createClient } from "@supabase/supabase-js";
 import { get, put } from "@vercel/blob";
 import { isValidAdminKey } from "@/lib/adminAuth";
+import { limited } from "@/lib/rateLimit";
 
 /*
  * Lead store, picked by available credentials:
@@ -88,6 +89,10 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  // anti-spam: 5 submissions per minute per IP
+  if (limited(req, "leads-post", 5, 60_000)) {
+    return NextResponse.json({ ok: false, error: "Too many submissions. Please wait a moment." }, { status: 429 });
+  }
   const body = await req.json().catch(() => ({}));
   const lead: Lead = {
     id: `lead_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { readJson, writeJson } from "@/lib/blob";
+import { limited } from "@/lib/rateLimit";
 
 /*
  * PUBLIC free website audit. A visitor submits their business + contact details:
@@ -21,7 +22,24 @@ function normalizeUrl(raw: string): string | null {
   let u = raw.trim();
   if (!/^https?:\/\//i.test(u)) u = "https://" + u;
   try {
-    return new URL(u).toString();
+    const parsed = new URL(u);
+    if (!/^https?:$/.test(parsed.protocol)) return null;
+    // SSRF guard: block internal / private / metadata hosts
+    const h = parsed.hostname.toLowerCase();
+    if (
+      h === "localhost" ||
+      h === "0.0.0.0" ||
+      h.endsWith(".local") ||
+      h.endsWith(".internal") ||
+      /^127\./.test(h) ||
+      /^10\./.test(h) ||
+      /^192\.168\./.test(h) ||
+      /^169\.254\./.test(h) ||
+      /^172\.(1[6-9]|2\d|3[01])\./.test(h)
+    ) {
+      return null;
+    }
+    return parsed.toString();
   } catch {
     return null;
   }
@@ -53,6 +71,10 @@ async function inspectSite(url: string) {
 }
 
 export async function POST(req: Request) {
+  // anti-abuse: 4 audits per 5 minutes per IP (protects AI quota)
+  if (limited(req, "audit", 4, 300_000)) {
+    return NextResponse.json({ error: "Too many requests. Please wait a few minutes." }, { status: 429 });
+  }
   const body = await req.json().catch(() => ({}));
   const { business, website, industry, email, phone, name } = body;
 
